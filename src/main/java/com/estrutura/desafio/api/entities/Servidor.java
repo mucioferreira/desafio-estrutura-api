@@ -2,15 +2,17 @@ package com.estrutura.desafio.api.entities;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
+
+import com.estrutura.desafio.api.enums.TipoServidorEnum;
 
 @Entity
 @Table(name = "tb_servidor")
@@ -19,17 +21,17 @@ public class Servidor {
 	private Long id;
 	private String nome;
 	private String ip;
-	private TipoServidor tipoServidor;
+	private TipoServidorEnum tipoServidor;
 	
 	public Servidor() {}
 	
-	public Servidor(String nome, String ip, TipoServidor tipoServidor) {
+	public Servidor(String nome, String ip, TipoServidorEnum tipoServidor) {
 		this.nome = nome;
 		this.ip = ip;
 		this.tipoServidor = tipoServidor;
 	}
 
-	public Servidor(Long id, String nome, String ip, TipoServidor tipoServidor) {
+	public Servidor(Long id, String nome, String ip, TipoServidorEnum tipoServidor) {
 		this.id = id;
 		this.nome = nome;
 		this.ip = ip;
@@ -70,13 +72,14 @@ public class Servidor {
 		this.ip = ip;
 	}
 
-	@ManyToOne(fetch = FetchType.EAGER)
-	@NotEmpty(message = "Tipo do Servidor não pode ser vazio.")
-	public TipoServidor getTipoServidor() {
+	
+	@Enumerated(EnumType.STRING)
+	@Column(name = "tipo_servidor", nullable = false)
+	public TipoServidorEnum getTipoServidor() {
 		return tipoServidor;
 	}
 
-	public void setTipoServidor(TipoServidor tipoServidor) {
+	public void setTipoServidor(TipoServidorEnum tipoServidor) {
 		this.tipoServidor = tipoServidor;
 	}
 	

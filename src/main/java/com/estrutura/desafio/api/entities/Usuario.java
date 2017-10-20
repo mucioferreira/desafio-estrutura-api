@@ -40,6 +40,7 @@ public class Usuario {
 		this.id = id;
 	}
 	
+	
 	@Column(name = "nme_usuario", nullable = false)
 	@NotEmpty(message = "Nome não pode ser vazio.")
 	@Length(min = 3, max = 100, message = "Nome deve conter entre 3 e 100 caracteres.")
