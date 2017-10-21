@@ -6,14 +6,14 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import org.hibernate.validator.constraints.Length;
-import org.hibernate.validator.constraints.NotEmpty;
 
 @Entity
-@Table(name = "ta_no_rede")
+@Table(name = "ta_usuario_rede")
 public class UsuarioDaRede {
 	
 	private Long id;
@@ -47,9 +47,8 @@ public class UsuarioDaRede {
 		this.id = id;
 	}
 
-	
-	@ManyToOne(fetch = FetchType.EAGER)
-	@NotEmpty(message = "Servidor não pode ser vazio.")
+    @ManyToOne(fetch = FetchType.LAZY, targetEntity = Servidor.class)
+    @JoinColumn(name = "cod_servidor", nullable = false)
 	public Servidor getServidor() {
 		return servidor;
 	}
@@ -58,9 +57,8 @@ public class UsuarioDaRede {
 		this.servidor = servidor;
 	}
 
-	
-	@ManyToOne(fetch = FetchType.EAGER)
-	@NotEmpty(message = "Usuário não pode ser vazio.")
+    @ManyToOne(fetch = FetchType.LAZY, targetEntity = Usuario.class)
+    @JoinColumn(name = "cod_usuario", nullable = false)
 	public Usuario getUsuario() {
 		return usuario;
 	}
@@ -70,7 +68,7 @@ public class UsuarioDaRede {
 	}
 
 
-	@Column(name = "desc_no_rede")
+	@Column(name = "desc_rede")
 	@Length(max = 255, message = "Descrição deve conter até 255 caracteres.")
 	public String getDescricaoDaRede() {
 		return descricaoDaRede;

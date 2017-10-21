@@ -31,7 +31,7 @@ public class Usuario {
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
-	@Column(name = "idt_usuairo")
+	@Column(name = "idt_usuario")
 	public Long getId() {
 		return id;
 	}

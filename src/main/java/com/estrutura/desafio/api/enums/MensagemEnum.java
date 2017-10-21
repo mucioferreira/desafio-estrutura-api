@@ -2,7 +2,7 @@ package com.estrutura.desafio.api.enums;
 
 public enum MensagemEnum {
 	NOME_VAZIO("Nome não pode ser vazio."),
-	NOME_TAMANHO("Nome deve conter entre 3 e 100 caracteres."),
+	NOME_TAMANHO_INVALIDO("Nome deve conter entre 3 e 100 caracteres."),
 	
 	IP_VAZIO("IP não pode ser vazio."),
 	

@@ -9,7 +9,7 @@ CREATE TABLE tb_servidor(
 );
 
 CREATE TABLE tb_usuario(
-	idt_usuairo INT PRIMARY KEY AUTO_INCREMENT,
+	idt_usuario INT PRIMARY KEY AUTO_INCREMENT,
     nme_usuario VARCHAR(100) NOT NULL
 );
 
