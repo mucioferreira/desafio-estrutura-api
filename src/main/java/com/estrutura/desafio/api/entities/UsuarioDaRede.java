@@ -1,5 +1,7 @@
 package com.estrutura.desafio.api.entities;
 
+import java.util.Optional;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -9,6 +11,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.hibernate.validator.constraints.Length;
 
@@ -47,20 +50,30 @@ public class UsuarioDaRede {
 		this.id = id;
 	}
 
-    @ManyToOne(fetch = FetchType.LAZY, targetEntity = Servidor.class)
+    @ManyToOne(fetch = FetchType.EAGER, targetEntity = Servidor.class)
     @JoinColumn(name = "cod_servidor", nullable = false)
 	public Servidor getServidor() {
 		return servidor;
+	}
+    
+    @Transient
+	public Optional<Servidor> getServidorOpt() {
+		return Optional.of(servidor);
 	}
 
 	public void setServidor(Servidor servidor) {
 		this.servidor = servidor;
 	}
 
-    @ManyToOne(fetch = FetchType.LAZY, targetEntity = Usuario.class)
+    @ManyToOne(fetch = FetchType.EAGER, targetEntity = Usuario.class)
     @JoinColumn(name = "cod_usuario", nullable = false)
 	public Usuario getUsuario() {
 		return usuario;
+	}
+    
+    @Transient
+	public Optional<Usuario> getUsuarioOpt() {
+		return Optional.of(usuario);
 	}
 
 	public void setUsuario(Usuario usuario) {

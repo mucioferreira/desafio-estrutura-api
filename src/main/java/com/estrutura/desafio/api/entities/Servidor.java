@@ -1,5 +1,7 @@
 package com.estrutura.desafio.api.entities;
 
+import java.util.Optional;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -8,6 +10,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
@@ -43,6 +46,11 @@ public class Servidor {
 	@Column(name = "idt_servidor")
 	public Long getId() {
 		return id;
+	}
+	
+	@Transient
+	public Optional<Long> getIdOpt() {
+		return Optional.of(id);
 	}
 
 	public void setId(Long id) {

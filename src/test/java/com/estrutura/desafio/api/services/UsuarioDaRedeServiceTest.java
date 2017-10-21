@@ -1,9 +1,7 @@
 package com.estrutura.desafio.api.services;
 
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-import java.util.List;
 import java.util.Optional;
 
 import org.junit.After;
@@ -12,6 +10,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -63,20 +63,20 @@ public class UsuarioDaRedeServiceTest {
 	
 	@Test
 	public void testProcurarPorIDDoUsuario() {
-		List<UsuarioDaRede> usuarioDaRede = this.usuarioDaRedeService.findByUsuarioId(1L);
-		assertFalse(usuarioDaRede.isEmpty());
+		Page<UsuarioDaRede> usuarioDaRede = this.usuarioDaRedeService.findByUsuarioId(1L, new PageRequest(0, 10));
+		assertTrue(usuarioDaRede.getNumberOfElements() > 0);
 	}
 	
 	@Test
 	public void testProcurarPorIDDoServidor() {
-		List<UsuarioDaRede> usuarioDaRede = this.usuarioDaRedeService.findByServidorId(1L);
-		assertFalse(usuarioDaRede.isEmpty());
+		Page<UsuarioDaRede> usuarioDaRede = this.usuarioDaRedeService.findByServidorId(1L, new PageRequest(0, 10));
+		assertTrue(usuarioDaRede.getNumberOfElements() > 0);
 	}
 	
 	@Test
 	public void testProcurarPorIPDoServidor() {
-		List<UsuarioDaRede> usuarioDaRede = this.usuarioDaRedeService.findByServidorIp(IP);
-		assertFalse(usuarioDaRede.isEmpty());
+		Page<UsuarioDaRede> usuarioDaRede = this.usuarioDaRedeService.findByServidorIp(IP, new PageRequest(0, 10));
+		assertTrue(usuarioDaRede.getNumberOfElements() > 0);
 	}
 	
 	@After

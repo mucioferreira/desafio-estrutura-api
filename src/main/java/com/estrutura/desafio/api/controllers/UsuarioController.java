@@ -76,7 +76,7 @@ public class UsuarioController {
 	@GetMapping
 	public ResponseEntity<Response<Page<Usuario>>> todosUsuario(
 		@RequestParam(value = "pagina", defaultValue = "0") int pagina,
-		@RequestParam(value = "Qtdpagina", defaultValue = "10") int qtdPagina,
+		@RequestParam(value = "qtdPagina", defaultValue = "10") int qtdPagina,
 		@RequestParam(value = "direcao", defaultValue = "DESC") String direcao,
 		@RequestParam(value = "ordem", defaultValue = "id") String ordem
 	) {

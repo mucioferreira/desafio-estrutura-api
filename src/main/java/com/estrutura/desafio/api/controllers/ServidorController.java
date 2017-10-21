@@ -52,7 +52,7 @@ public class ServidorController {
 	public ResponseEntity<Response<Servidor>> modificarServidor(@Valid @RequestBody Servidor servidor, BindingResult result) throws NoSuchAlgorithmException {
 		Response<Servidor> response = new Response<Servidor>();
 		
-		if(!this.buscarServidor(servidor).isPresent()) result.addError(new ObjectError("servidor", String.valueOf(MensagemEnum.SERVIDOR_NAO_ENCONTRADO)));
+		if(!this.servidorService.findById(servidor.getId()).isPresent()) result.addError(new ObjectError("servidor", String.valueOf(MensagemEnum.SERVIDOR_NAO_ENCONTRADO)));
 		if(result.hasErrors()) return response.getResponseWithErrors(response, result);
 		else servidor = this.servidorService.save(servidor);
 		
@@ -64,7 +64,7 @@ public class ServidorController {
 	public ResponseEntity<Response<Servidor>> deletarServidor(@PathVariable("id") Long id) throws NoSuchAlgorithmException {
 		Response<Servidor> response = new Response<Servidor>();
 		
-		if(!this.buscarServidor(id).isPresent()) {
+		if(!this.servidorService.findById(id).isPresent()) {
 			response.getErrors().add(String.valueOf(MensagemEnum.SERVIDOR_NAO_ENCONTRADO));
 			return ResponseEntity.badRequest().body(response);
 		}
@@ -76,7 +76,7 @@ public class ServidorController {
 	@GetMapping
 	public ResponseEntity<Response<Page<Servidor>>> todosServidor(
 		@RequestParam(value = "pagina", defaultValue = "0") int pagina,
-		@RequestParam(value = "Qtdpagina", defaultValue = "10") int qtdPagina,
+		@RequestParam(value = "qtdPagina", defaultValue = "10") int qtdPagina,
 		@RequestParam(value = "direcao", defaultValue = "DESC") String direcao,
 		@RequestParam(value = "ordem", defaultValue = "id") String ordem
 	) {
@@ -87,23 +87,15 @@ public class ServidorController {
 	
 	@GetMapping(value = "/{id}")
 	public ResponseEntity<Response<Servidor>> procurarServidorPeloId(@PathVariable("id") Long id) throws NoSuchAlgorithmException {
-		Response<Servidor> response = new Response<Servidor>();
-		Optional<Servidor> servidor = this.buscarServidor(id);
-		
-		if(!servidor.isPresent()) {
-			response.getErrors().add(String.valueOf(MensagemEnum.SERVIDOR_NAO_ENCONTRADO));
-			return ResponseEntity.badRequest().body(response);
-		}
-
-		response.setData(servidor.get());
-		return ResponseEntity.ok(response);
+		return this.verificarBuscaDoServidor(new Response<Servidor>(), this.servidorService.findById(id));
 	}
 	
 	@GetMapping(value = "/ip/{ip}")
 	public ResponseEntity<Response<Servidor>> procurarServidorPeloIp(@PathVariable("ip") String ip) throws NoSuchAlgorithmException {
-		Response<Servidor> response = new Response<Servidor>();
-		Optional<Servidor> servidor = this.buscarServidor(ip);
-		
+		 return this.verificarBuscaDoServidor(new Response<Servidor>(), this.servidorService.findByIp(ip));
+	}
+	
+	private ResponseEntity<Response<Servidor>> verificarBuscaDoServidor(Response<Servidor> response, Optional<Servidor> servidor){
 		if(!servidor.isPresent()) {
 			response.getErrors().add(String.valueOf(MensagemEnum.SERVIDOR_NAO_ENCONTRADO));
 			return ResponseEntity.badRequest().body(response);
@@ -111,18 +103,6 @@ public class ServidorController {
 
 		response.setData(servidor.get());
 		return ResponseEntity.ok(response);
-	}
-	
-	
-	private Optional<Servidor> buscarServidor(Servidor servidor) {
-		return (servidor.getId() != null) ? this.servidorService.findById(servidor.getId()) : Optional.empty();
-	}
-	
-	private Optional<Servidor> buscarServidor(Long id) {
-		return (id != null) ? this.servidorService.findById(id) : Optional.empty();
-	}
-
-	private Optional<Servidor> buscarServidor(String ip) {
-		return (ip != null) ? this.servidorService.findByIp(ip) : Optional.empty();
+		
 	}
 }
