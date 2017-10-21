@@ -52,7 +52,7 @@ public class Servidor {
 	
 	@Column(name = "nme_servidor", nullable = false)
 	@NotEmpty(message = "Nome não pode ser vazio.")
-	@Length(min = 3, max = 200, message = "Nome deve conter entre 3 e 200 caracteres.")
+	@Length(min = 3, max = 100, message = "Nome deve conter entre 3 e 100 caracteres.")
 	public String getNome() {
 		return nome;
 	}

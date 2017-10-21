@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.estrutura.desafio.api.entities.Servidor;
+import com.estrutura.desafio.api.enums.MensagemEnum;
 import com.estrutura.desafio.api.response.Response;
 import com.estrutura.desafio.api.services.ServidorService;
 
@@ -51,7 +52,7 @@ public class ServidorController {
 	public ResponseEntity<Response<Servidor>> modificarServidor(@Valid @RequestBody Servidor servidor, BindingResult result) throws NoSuchAlgorithmException {
 		Response<Servidor> response = new Response<Servidor>();
 		
-		if(!this.buscarServidor(servidor).isPresent()) result.addError(new ObjectError("servidor", "Servidor não encontrado."));
+		if(!this.buscarServidor(servidor).isPresent()) result.addError(new ObjectError("servidor", String.valueOf(MensagemEnum.SERVIDOR_NAO_ENCONTRADO)));
 		if(result.hasErrors()) return response.getResponseWithErrors(response, result);
 		else servidor = this.servidorService.save(servidor);
 		
@@ -64,7 +65,7 @@ public class ServidorController {
 		Response<Servidor> response = new Response<Servidor>();
 		
 		if(!this.buscarServidor(id).isPresent()) {
-			response.getErrors().add("Usuário não encontrado.");
+			response.getErrors().add(String.valueOf(MensagemEnum.SERVIDOR_NAO_ENCONTRADO));
 			return ResponseEntity.badRequest().body(response);
 		}
 			
@@ -90,7 +91,7 @@ public class ServidorController {
 		Optional<Servidor> servidor = this.buscarServidor(id);
 		
 		if(!servidor.isPresent()) {
-			response.getErrors().add("Servidor não encontrado.");
+			response.getErrors().add(String.valueOf(MensagemEnum.SERVIDOR_NAO_ENCONTRADO));
 			return ResponseEntity.badRequest().body(response);
 		}
 
@@ -104,7 +105,7 @@ public class ServidorController {
 		Optional<Servidor> servidor = this.buscarServidor(ip);
 		
 		if(!servidor.isPresent()) {
-			response.getErrors().add("Servidor não encontrado.");
+			response.getErrors().add(String.valueOf(MensagemEnum.SERVIDOR_NAO_ENCONTRADO));
 			return ResponseEntity.badRequest().body(response);
 		}
 

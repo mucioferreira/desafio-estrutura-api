@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.estrutura.desafio.api.entities.Usuario;
+import com.estrutura.desafio.api.enums.MensagemEnum;
 import com.estrutura.desafio.api.response.Response;
 import com.estrutura.desafio.api.services.UsuarioService;
 
@@ -50,7 +51,7 @@ public class UsuarioController {
 	public ResponseEntity<Response<Usuario>> modificarUsuario(@Valid @RequestBody Usuario usuario, BindingResult result) throws NoSuchAlgorithmException {
 		Response<Usuario> response = new Response<Usuario>();
 		
-		if(!this.buscarUsuario(usuario).isPresent()) result.addError(new ObjectError("usuario", "Usuário não encontrado."));
+		if(!this.buscarUsuario(usuario).isPresent()) result.addError(new ObjectError("usuario", String.valueOf(MensagemEnum.USUARIO_NAO_ENCONTRADO)));
 		
 		if(result.hasErrors()) return response.getResponseWithErrors(response, result);
 		else usuario = this.usuarioService.save(usuario);
@@ -64,7 +65,7 @@ public class UsuarioController {
 		Response<Usuario> response = new Response<Usuario>();
 		
 		if(!this.buscarUsuario(id).isPresent()) {
-			response.getErrors().add("Usuário não encontrado.");
+			response.getErrors().add(String.valueOf(MensagemEnum.USUARIO_NAO_ENCONTRADO));
 			return ResponseEntity.badRequest().body(response);
 		}
 			
@@ -90,7 +91,7 @@ public class UsuarioController {
 		Optional<Usuario> usuario = this.buscarUsuario(id);
 		
 		if(!usuario.isPresent()) {
-			response.getErrors().add("Usuário não encontrado.");
+			response.getErrors().add(String.valueOf(MensagemEnum.USUARIO_NAO_ENCONTRADO));
 			return ResponseEntity.badRequest().body(response);
 		}
 			
