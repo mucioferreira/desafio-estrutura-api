@@ -44,13 +44,13 @@ public class NoDaRedeServiceTest {
 	
 	@Test
 	public void testBuscarPorId() throws Exception {
-		Optional<NoDaRede> noDaRede = this.noDaRedeService.findById(4L);
+		Optional<NoDaRede> noDaRede = this.noDaRedeService.findById(1L);
 		assertTrue(noDaRede.isPresent());		
 	}
 
 	@Test
 	public void testBuscarPorIdDoPrimeiroServidor() throws Exception {
-		Page<NoDaRede> noDaRede = this.noDaRedeService.findByPrimeiroServidorId(3L, new PageRequest(0, 10));
+		Page<NoDaRede> noDaRede = this.noDaRedeService.findByPrimeiroServidorId(1L, new PageRequest(0, 10));
 		assertTrue(noDaRede.getNumberOfElements() > 0);	
 	}
 	
