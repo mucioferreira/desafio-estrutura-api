@@ -4,6 +4,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.Optional;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -34,10 +35,13 @@ public class NoDaRedeServiceTest {
 	private static final String IP_SERVIDOR_2 = "987654321";
 	private static final String DESCRICAO_REDE = "Teste descricao";
 	
+	private static final Servidor PRIMEIRO_SERVIDOR = new Servidor(NOME_SERVIDOR, IP_SERVIDOR, TipoServidorEnum.PROXY);
+	private static final Servidor SEGUNDO_SERVIDOR = new Servidor(NOME_SERVIDOR, IP_SERVIDOR_2, TipoServidorEnum.SERVIDOR_DE_BANCO);
+	
 	@Before
 	public void setUp() throws Exception {
-		Servidor primeiroServidor = this.servidorService.save(new Servidor(NOME_SERVIDOR, IP_SERVIDOR, TipoServidorEnum.PROXY));
-		Servidor segundoServidor = this.servidorService.save(new Servidor(NOME_SERVIDOR, IP_SERVIDOR_2, TipoServidorEnum.SERVIDOR_DE_BANCO));
+		Servidor primeiroServidor = this.servidorService.save(PRIMEIRO_SERVIDOR);
+		Servidor segundoServidor = this.servidorService.save(SEGUNDO_SERVIDOR);
 		this.noDaRedeService.save(new NoDaRede(primeiroServidor, segundoServidor, DESCRICAO_REDE));
 	}
 	
@@ -59,4 +63,8 @@ public class NoDaRedeServiceTest {
 		assertTrue(noDaRede.getNumberOfElements() > 0);	
 	}
 
+	@After
+	public void tearDown() throws Exception {
+		this.noDaRedeService.deleteAll();
+	}
 }
