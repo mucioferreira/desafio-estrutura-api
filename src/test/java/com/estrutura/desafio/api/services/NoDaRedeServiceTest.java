@@ -40,9 +40,9 @@ public class NoDaRedeServiceTest {
 	
 	@Before
 	public void setUp() throws Exception {
-		Servidor primeiroServidor = this.servidorService.save(PRIMEIRO_SERVIDOR);
-		Servidor segundoServidor = this.servidorService.save(SEGUNDO_SERVIDOR);
-		this.noDaRedeService.save(new NoDaRede(primeiroServidor, segundoServidor, DESCRICAO_REDE));
+		this.servidorService.save(PRIMEIRO_SERVIDOR);
+		this.servidorService.save(SEGUNDO_SERVIDOR);
+		this.noDaRedeService.save(new NoDaRede(this.servidorService.findOne(1L), this.servidorService.findOne(2L), DESCRICAO_REDE));
 	}
 	
 	@Test
