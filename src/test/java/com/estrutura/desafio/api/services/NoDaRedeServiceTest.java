@@ -4,6 +4,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.Optional;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -43,13 +44,13 @@ public class NoDaRedeServiceTest {
 	
 	@Test
 	public void testBuscarPorId() throws Exception {
-		Optional<NoDaRede> noDaRede = this.noDaRedeService.findById(1L);
+		Optional<NoDaRede> noDaRede = this.noDaRedeService.findById(4L);
 		assertTrue(noDaRede.isPresent());		
 	}
 
 	@Test
 	public void testBuscarPorIdDoPrimeiroServidor() throws Exception {
-		Page<NoDaRede> noDaRede = this.noDaRedeService.findByPrimeiroServidorId(1L, new PageRequest(0, 10));
+		Page<NoDaRede> noDaRede = this.noDaRedeService.findByPrimeiroServidorId(3L, new PageRequest(0, 10));
 		assertTrue(noDaRede.getNumberOfElements() > 0);	
 	}
 	
@@ -71,4 +72,8 @@ public class NoDaRedeServiceTest {
 		assertTrue(noDaRede.getNumberOfElements() > 0);	
 	}
 
+	@After
+	public void tearDown() throws Exception {
+		this.noDaRedeService.deleteAll();
+	}
 }
