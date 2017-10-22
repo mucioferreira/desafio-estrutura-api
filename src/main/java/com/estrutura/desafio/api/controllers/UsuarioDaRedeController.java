@@ -49,6 +49,7 @@ public class UsuarioDaRedeController {
 		Response<UsuarioDaRede> response = new Response<UsuarioDaRede>();
 		
 		if(!this.servidorService.findById(usuarioDaRede.getServidor().getId()).isPresent()) result.addError(new ObjectError("servidor", String.valueOf(MensagemEnum.SERVIDOR_NAO_ENCONTRADO)));
+		if(!this.usuarioService.findById(usuarioDaRede.getUsuario().getId()).isPresent()) result.addError(new ObjectError("usuario", String.valueOf(MensagemEnum.USUARIO_NAO_ENCONTRADO)));
 		if(result.hasErrors()) return response.getResponseWithErrors(response, result);
 		else usuarioDaRede = this.usuarioDaRedeService.save(usuarioDaRede);
 		
@@ -114,16 +115,16 @@ public class UsuarioDaRedeController {
 		return this.verificarBuscaDoUsuarioDaRede(new Response<Page<UsuarioDaRede>>(), this.usuarioDaRedeService.findByServidorIp(ip, new PageRequest(pagina, qtdPagina, Direction.valueOf(direcao), ordem)));
 	}
 	
-	@DeleteMapping(value = "/{id}")
-	public ResponseEntity<Response<UsuarioDaRede>> deletarServidor(@PathVariable("id") Long id) throws NoSuchAlgorithmException {
+	@DeleteMapping
+	public ResponseEntity<Response<UsuarioDaRede>> deletarServidor(@RequestBody UsuarioDaRede usuarioDaRede) throws NoSuchAlgorithmException {
 		Response<UsuarioDaRede> response = new Response<UsuarioDaRede>();
 		
-		if(!this.usuarioDaRedeService.findById(id).isPresent()) {
+		if(!this.usuarioDaRedeService.findById(usuarioDaRede.getId()).isPresent()) {
 			response.getErrors().add(String.valueOf(MensagemEnum.USUARIO_DA_REDE_NAO_ENCONTRADO));
 			return ResponseEntity.badRequest().body(response);
 		}
 			
-		this.usuarioDaRedeService.delete(id);
+		this.usuarioDaRedeService.delete(usuarioDaRede);
 		return ResponseEntity.ok(response);
 	}
 	

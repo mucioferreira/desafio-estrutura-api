@@ -4,7 +4,6 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.Optional;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -44,36 +43,20 @@ public class NoDaRedeServiceTest {
 	
 	@Test
 	public void testBuscarPorId() throws Exception {
-		Optional<NoDaRede> noDaRede = this.noDaRedeService.findById(4L);
+		Optional<NoDaRede> noDaRede = this.noDaRedeService.findById(1L);
 		assertTrue(noDaRede.isPresent());		
 	}
 
 	@Test
-	public void testBuscarPorIdDoPrimeiroServidor() throws Exception {
-		Page<NoDaRede> noDaRede = this.noDaRedeService.findByPrimeiroServidorId(3L, new PageRequest(0, 10));
+	public void testBuscarPorIdDoServidor() throws Exception {
+		Page<NoDaRede> noDaRede = this.noDaRedeService.findByPrimeiroServidorId(1L, new PageRequest(0, 10));
 		assertTrue(noDaRede.getNumberOfElements() > 0);	
 	}
 	
 	@Test
-	public void testBuscarPorIpDoPrimeiroServidor() throws Exception {
+	public void testBuscarPorIpServidor() throws Exception {
 		Page<NoDaRede> noDaRede = this.noDaRedeService.findByPrimeiroServidorIp(IP_SERVIDOR, new PageRequest(0, 10));
 		assertTrue(noDaRede.getNumberOfElements() > 0);	
 	}
-	
-	@Test
-	public void testBuscarPorIpDoSegundoServidor() throws Exception {
-		Page<NoDaRede> noDaRede = this.noDaRedeService.findBySegundoServidorIp(IP_SERVIDOR_2, new PageRequest(0, 10));
-		assertTrue(noDaRede.getNumberOfElements() > 0);	
-	}
-	
-	@Test
-	public void testBuscarPorIdDoSegundoServidor() throws Exception {
-		Page<NoDaRede> noDaRede = this.noDaRedeService.findBySegundoServidorId(2L, new PageRequest(0, 10));
-		assertTrue(noDaRede.getNumberOfElements() > 0);	
-	}
 
-	@After
-	public void tearDown() throws Exception {
-		this.noDaRedeService.deleteAll();
-	}
 }

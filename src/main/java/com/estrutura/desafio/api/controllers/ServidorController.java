@@ -60,16 +60,16 @@ public class ServidorController {
 		return ResponseEntity.ok(response);
 	}
 	
-	@DeleteMapping(value = "/{id}")
-	public ResponseEntity<Response<Servidor>> deletarServidor(@PathVariable("id") Long id) throws NoSuchAlgorithmException {
+	@DeleteMapping
+	public ResponseEntity<Response<Servidor>> deletarServidor(@RequestBody Servidor servidor) throws NoSuchAlgorithmException {
 		Response<Servidor> response = new Response<Servidor>();
 		
-		if(!this.servidorService.findById(id).isPresent()) {
+		if(!this.servidorService.findById(servidor.getId()).isPresent()) {
 			response.getErrors().add(String.valueOf(MensagemEnum.SERVIDOR_NAO_ENCONTRADO));
 			return ResponseEntity.badRequest().body(response);
 		}
 			
-		this.servidorService.delete(id);
+		this.servidorService.delete(servidor);
 		return ResponseEntity.ok(response);
 	}
 	

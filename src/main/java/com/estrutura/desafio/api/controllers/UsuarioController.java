@@ -60,16 +60,16 @@ public class UsuarioController {
 		return ResponseEntity.ok(response);
 	}
 	
-	@DeleteMapping(value = "/{id}")
-	public ResponseEntity<Response<Usuario>> deletarUsuario(@PathVariable("id") Long id) throws NoSuchAlgorithmException {
+	@DeleteMapping
+	public ResponseEntity<Response<Usuario>> deletarUsuario(@RequestBody Usuario usuario) throws NoSuchAlgorithmException {
 		Response<Usuario> response = new Response<Usuario>();
 		
-		if(!this.buscarUsuario(id).isPresent()) {
+		if(!this.buscarUsuario(usuario.getId()).isPresent()) {
 			response.getErrors().add(String.valueOf(MensagemEnum.USUARIO_NAO_ENCONTRADO));
 			return ResponseEntity.badRequest().body(response);
 		}
 			
-		this.usuarioService.delete(id);
+		this.usuarioService.delete(usuario);
 		return ResponseEntity.ok(response);
 	}
 	
