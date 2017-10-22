@@ -116,7 +116,7 @@ public class NoDaRedeController {
 	
 	private ResponseEntity<Response<Page<NoDaRede>>> verificarBuscaDoNoDaRede(Response<Page<NoDaRede>> response, Page<NoDaRede> noDaRede) {
 		if(noDaRede.getTotalElements() <= 0) {
-			response.getErrors().add(String.valueOf(MensagemEnum.USUARIO_DA_REDE_NAO_ENCONTRADO));
+			response.getErrors().add(String.valueOf(MensagemEnum.NO_DA_REDE_NAO_ENCONTRADO));
 			return ResponseEntity.badRequest().body(response);
 		}
 		

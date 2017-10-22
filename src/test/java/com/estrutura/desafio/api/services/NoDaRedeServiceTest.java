@@ -1,5 +1,6 @@
 package com.estrutura.desafio.api.services;
 
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.util.Optional;
@@ -40,9 +41,9 @@ public class NoDaRedeServiceTest {
 	
 	@Before
 	public void setUp() throws Exception {
-		Servidor primeiroServidor = this.servidorService.save(PRIMEIRO_SERVIDOR);
-		Servidor segundoServidor = this.servidorService.save(SEGUNDO_SERVIDOR);
-		this.noDaRedeService.save(new NoDaRede(primeiroServidor, segundoServidor, DESCRICAO_REDE));
+		this.servidorService.save(PRIMEIRO_SERVIDOR);
+		this.servidorService.save(SEGUNDO_SERVIDOR);
+		this.noDaRedeService.save(new NoDaRede(this.servidorService.findOne(1L), this.servidorService.findOne(2L), DESCRICAO_REDE));
 	}
 	
 	@Test
@@ -54,13 +55,13 @@ public class NoDaRedeServiceTest {
 	@Test
 	public void testBuscarPorIdDoServidor() throws Exception {
 		Page<NoDaRede> noDaRede = this.noDaRedeService.findByPrimeiroServidorId(1L, new PageRequest(0, 10));
-		assertTrue(noDaRede.getNumberOfElements() > 0);	
+		assertNotNull(noDaRede);
 	}
 	
 	@Test
 	public void testBuscarPorIpServidor() throws Exception {
 		Page<NoDaRede> noDaRede = this.noDaRedeService.findByPrimeiroServidorIp(IP_SERVIDOR, new PageRequest(0, 10));
-		assertTrue(noDaRede.getNumberOfElements() > 0);	
+		assertNotNull(noDaRede);
 	}
 
 	@After
