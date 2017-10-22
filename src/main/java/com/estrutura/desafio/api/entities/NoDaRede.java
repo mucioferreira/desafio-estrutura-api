@@ -6,11 +6,11 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import org.hibernate.validator.constraints.Length;
-import org.hibernate.validator.constraints.NotEmpty;
 
 @Entity
 @Table(name = "ta_no_rede")
@@ -48,8 +48,8 @@ public class NoDaRede {
 	}
 
 	
-	@ManyToOne(fetch = FetchType.EAGER)
-	@NotEmpty(message = "Primeiro Servidor não pode ser vazio.")
+	@ManyToOne(fetch = FetchType.EAGER, targetEntity = Servidor.class)
+	@JoinColumn(name = "cod_primeiro_servidor", nullable = false)
 	public Servidor getPrimeiroServidor() {
 		return primeiroServidor;
 	}
@@ -59,8 +59,8 @@ public class NoDaRede {
 	}
 
 	
-	@ManyToOne(fetch = FetchType.EAGER)
-	@NotEmpty(message = "Segundo Servidor não pode ser vazio.")
+	@ManyToOne(fetch = FetchType.EAGER, targetEntity = Servidor.class)
+	@JoinColumn(name = "cod_segundo_servidor", nullable = false)
 	public Servidor getSegundoServidor() {
 		return segundoServidor;
 	}
