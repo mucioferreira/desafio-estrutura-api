@@ -11,7 +11,9 @@ public enum MensagemEnum {
 	USUARIO_DA_REDE_NAO_ENCONTRADO("Usuário da rede não encontrado."),
 	NO_DA_REDE_NAO_ENCONTRADO("No da rede não encontrado."),
 	USUARIO_NAO_PERTENCE_A_REDE("Usuário não esta cadastrado em nenhuma rede."),
-	SERVIDOR_NAO_PERTENCE_A_REDE("Servidor não esta cadastrado em nenhuma rede.");
+	SERVIDOR_NAO_PERTENCE_A_REDE("Servidor não esta cadastrado em nenhuma rede."),
+	USUARIO_NAO_PODE_SER_EXCLUIDO("Usuário não pode ser excluido."),
+	SERVIDOR_NAO_PODE_SER_EXCLUIDO("Servidor não pode ser excluido.");
 	
 	private String mensagem;
 	

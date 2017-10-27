@@ -69,7 +69,13 @@ public class UsuarioController {
 			return ResponseEntity.badRequest().body(response);
 		}
 			
-		this.usuarioService.delete(usuario);
+		try {
+			this.usuarioService.delete(usuario);
+		} catch (Exception e) {
+			response.getErrors().add(String.valueOf(MensagemEnum.USUARIO_NAO_PODE_SER_EXCLUIDO));
+			return ResponseEntity.badRequest().body(response);
+		}
+		
 		return ResponseEntity.ok(response);
 	}
 	

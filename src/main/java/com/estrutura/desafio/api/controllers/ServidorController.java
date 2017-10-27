@@ -68,8 +68,14 @@ public class ServidorController {
 			response.getErrors().add(String.valueOf(MensagemEnum.SERVIDOR_NAO_ENCONTRADO));
 			return ResponseEntity.badRequest().body(response);
 		}
-			
-		this.servidorService.delete(servidor);
+		
+		try {
+			this.servidorService.delete(servidor);
+		} catch (Exception e) {
+			response.getErrors().add(String.valueOf(MensagemEnum.SERVIDOR_NAO_PODE_SER_EXCLUIDO));
+			return ResponseEntity.badRequest().body(response);
+		}
+		
 		return ResponseEntity.ok(response);
 	}
 	
