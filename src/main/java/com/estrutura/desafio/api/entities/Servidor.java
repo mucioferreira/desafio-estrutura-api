@@ -1,14 +1,18 @@
 package com.estrutura.desafio.api.entities;
 
+import java.util.List;
 import java.util.Optional;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
@@ -16,15 +20,35 @@ import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import com.estrutura.desafio.api.enums.TipoServidorEnum;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 @Entity
 @Table(name = "tb_servidor")
+@JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "id", scope = NoDaRede.class)
 public class Servidor {
 
+	@Id
+	@GeneratedValue(strategy=GenerationType.AUTO)
+	@Column(name = "idt_servidor")
 	private Long id;
+	
+	@Column(name = "nme_servidor", nullable = false)
+	@NotEmpty(message = "Nome não pode ser vazio.")
+	@Length(min = 3, max = 100, message = "Nome deve conter entre 3 e 100 caracteres.")
 	private String nome;
+	
+	@Column(name = "ip_servidor", nullable = false)
+	@NotEmpty(message = "IP não pode ser vazio.")
 	private String ip;
+	
+	@Enumerated(EnumType.STRING)
+	@Column(name = "tipo_servidor", nullable = false)
 	private TipoServidorEnum tipoServidor;
+
+	@OneToMany(mappedBy = "primeiroServidor", fetch = FetchType.EAGER, cascade = CascadeType.ALL, targetEntity = NoDaRede.class)
+	private List<NoDaRede> noDaRede;
 	
 	public Servidor() {}
 	
@@ -41,14 +65,12 @@ public class Servidor {
 		this.tipoServidor = tipoServidor;
 	}
 
-	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
-	@Column(name = "idt_servidor")
 	public Long getId() {
 		return id;
 	}
 	
 	@Transient
+	@JsonIgnore
 	public Optional<Long> getIdOpt() {
 		return Optional.of(id);
 	}
@@ -57,10 +79,6 @@ public class Servidor {
 		this.id = id;
 	}
 	
-	
-	@Column(name = "nme_servidor", nullable = false)
-	@NotEmpty(message = "Nome não pode ser vazio.")
-	@Length(min = 3, max = 100, message = "Nome deve conter entre 3 e 100 caracteres.")
 	public String getNome() {
 		return nome;
 	}
@@ -69,9 +87,6 @@ public class Servidor {
 		this.nome = nome;
 	}
 
-	
-	@Column(name = "ip_servidor", nullable = false)
-	@NotEmpty(message = "IP não pode ser vazio.")
 	public String getIp() {
 		return ip;
 	}
@@ -80,15 +95,20 @@ public class Servidor {
 		this.ip = ip;
 	}
 
-	
-	@Enumerated(EnumType.STRING)
-	@Column(name = "tipo_servidor", nullable = false)
 	public TipoServidorEnum getTipoServidor() {
 		return tipoServidor;
 	}
 
 	public void setTipoServidor(TipoServidorEnum tipoServidor) {
 		this.tipoServidor = tipoServidor;
+	}
+
+	public List<NoDaRede> getNoDaRede() {
+		return noDaRede;
+	}
+
+	public void setNoDaRede(List<NoDaRede> noDaRede) {
+		this.noDaRede = noDaRede;
 	}
 	
 }

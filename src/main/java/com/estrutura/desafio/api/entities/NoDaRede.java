@@ -16,9 +16,21 @@ import org.hibernate.validator.constraints.Length;
 @Table(name = "ta_no_rede")
 public class NoDaRede {
 	
+	@Id
+	@GeneratedValue(strategy=GenerationType.AUTO)
+	@Column(name = "idt_no_rede")
 	private Long id;
+	
+	@ManyToOne(fetch = FetchType.EAGER, targetEntity = Servidor.class)
+	@JoinColumn(name = "cod_primeiro_servidor", nullable = false)
 	private Servidor primeiroServidor;
+	
+	@ManyToOne(fetch = FetchType.EAGER, targetEntity = Servidor.class)
+	@JoinColumn(name = "cod_segundo_servidor", nullable = false)
 	private Servidor segundoServidor;
+	
+	@Column(name = "desc_no_rede")
+	@Length(max = 255, message = "Descrição deve conter até 255 caracteres.")
 	private String descricaoDaRede;
 	
 	public NoDaRede() {	}
@@ -36,9 +48,6 @@ public class NoDaRede {
 		this.descricaoDaRede = descricaoDaRede;
 	}
 
-	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
-	@Column(name = "idt_no_rede")
 	public Long getId() {
 		return id;
 	}
@@ -47,9 +56,6 @@ public class NoDaRede {
 		this.id = id;
 	}
 
-	
-	@ManyToOne(fetch = FetchType.EAGER, targetEntity = Servidor.class)
-	@JoinColumn(name = "cod_primeiro_servidor", nullable = false)
 	public Servidor getPrimeiroServidor() {
 		return primeiroServidor;
 	}
@@ -58,9 +64,6 @@ public class NoDaRede {
 		this.primeiroServidor = primeiroServidor;
 	}
 
-	
-	@ManyToOne(fetch = FetchType.EAGER, targetEntity = Servidor.class)
-	@JoinColumn(name = "cod_segundo_servidor", nullable = false)
 	public Servidor getSegundoServidor() {
 		return segundoServidor;
 	}
@@ -69,9 +72,6 @@ public class NoDaRede {
 		this.segundoServidor = segundoServidor;
 	}
 
-	
-	@Column(name = "desc_no_rede")
-	@Length(max = 255, message = "Descrição deve conter até 255 caracteres.")
 	public String getDescricaoDaRede() {
 		return descricaoDaRede;
 	}

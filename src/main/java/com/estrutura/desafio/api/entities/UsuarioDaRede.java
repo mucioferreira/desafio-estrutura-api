@@ -15,13 +15,27 @@ import javax.persistence.Transient;
 
 import org.hibernate.validator.constraints.Length;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name = "ta_usuario_rede")
 public class UsuarioDaRede {
 	
+	@Id
+	@GeneratedValue(strategy=GenerationType.AUTO)
+	@Column(name = "idt_usuario_rede")
 	private Long id;
+	
+    @ManyToOne(fetch = FetchType.EAGER, targetEntity = Servidor.class)
+    @JoinColumn(name = "cod_servidor", nullable = false)
 	private Servidor servidor;
+    
+    @ManyToOne(fetch = FetchType.EAGER, targetEntity = Usuario.class)
+    @JoinColumn(name = "cod_usuario", nullable = false)
 	private Usuario usuario;
+    
+	@Column(name = "desc_rede")
+	@Length(max = 255, message = "Descrição deve conter até 255 caracteres.")
 	private String descricaoDaRede;
 	
 	public UsuarioDaRede() {	}
@@ -39,9 +53,6 @@ public class UsuarioDaRede {
 		this.descricaoDaRede = descricaoDaRede;
 	}
 
-	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
-	@Column(name = "idt_usuario_rede")
 	public Long getId() {
 		return id;
 	}
@@ -50,13 +61,12 @@ public class UsuarioDaRede {
 		this.id = id;
 	}
 
-    @ManyToOne(fetch = FetchType.EAGER, targetEntity = Servidor.class)
-    @JoinColumn(name = "cod_servidor", nullable = false)
 	public Servidor getServidor() {
 		return servidor;
 	}
     
     @Transient
+    @JsonIgnore
 	public Optional<Servidor> getServidorOpt() {
 		return Optional.of(servidor);
 	}
@@ -65,13 +75,12 @@ public class UsuarioDaRede {
 		this.servidor = servidor;
 	}
 
-    @ManyToOne(fetch = FetchType.EAGER, targetEntity = Usuario.class)
-    @JoinColumn(name = "cod_usuario", nullable = false)
 	public Usuario getUsuario() {
 		return usuario;
 	}
     
     @Transient
+    @JsonIgnore
 	public Optional<Usuario> getUsuarioOpt() {
 		return Optional.of(usuario);
 	}
@@ -80,9 +89,6 @@ public class UsuarioDaRede {
 		this.usuario = usuario;
 	}
 
-
-	@Column(name = "desc_rede")
-	@Length(max = 255, message = "Descrição deve conter até 255 caracteres.")
 	public String getDescricaoDaRede() {
 		return descricaoDaRede;
 	}
