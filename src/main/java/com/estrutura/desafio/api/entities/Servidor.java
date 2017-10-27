@@ -22,11 +22,11 @@ import org.hibernate.validator.constraints.NotEmpty;
 import com.estrutura.desafio.api.enums.TipoServidorEnum;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.voodoodyne.jackson.jsog.JSOGGenerator;
 
 @Entity
 @Table(name = "tb_servidor")
-@JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "id", scope = NoDaRede.class)
+@JsonIdentityInfo(generator = JSOGGenerator.class)
 public class Servidor {
 
 	@Id
