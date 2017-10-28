@@ -20,13 +20,14 @@ import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import com.estrutura.desafio.api.enums.TipoServidorEnum;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.voodoodyne.jackson.jsog.JSOGGenerator;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 @Entity
 @Table(name = "tb_servidor")
-@JsonIdentityInfo(generator = JSOGGenerator.class)
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property="@id")
 public class Servidor {
 
 	@Id
@@ -49,6 +50,10 @@ public class Servidor {
 
 	@OneToMany(mappedBy = "primeiroServidor", fetch = FetchType.EAGER, cascade = CascadeType.ALL, targetEntity = NoDaRede.class)
 	private List<NoDaRede> noDaRede;
+	
+	@OneToMany(mappedBy = "servidor", fetch = FetchType.LAZY, cascade = CascadeType.ALL, targetEntity = UsuarioDaRede.class)
+	@JsonBackReference
+	private List<UsuarioDaRede> usuarioDaRede;
 	
 	public Servidor() {}
 	
@@ -114,6 +119,14 @@ public class Servidor {
 
 	public void setNoDaRede(List<NoDaRede> noDaRede) {
 		this.noDaRede = noDaRede;
+	}
+
+	public List<UsuarioDaRede> getUsuarioDaRede() {
+		return usuarioDaRede;
+	}
+
+	public void setUsuarioDaRede(List<UsuarioDaRede> usuarioDaRede) {
+		this.usuarioDaRede = usuarioDaRede;
 	}
 	
 }

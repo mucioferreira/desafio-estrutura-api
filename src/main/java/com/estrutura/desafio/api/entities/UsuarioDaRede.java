@@ -15,10 +15,13 @@ import javax.persistence.Transient;
 
 import org.hibernate.validator.constraints.Length;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 @Entity
 @Table(name = "ta_usuario_rede")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property="@id")
 public class UsuarioDaRede {
 	
 	@Id
@@ -28,11 +31,11 @@ public class UsuarioDaRede {
 	
     @ManyToOne(fetch = FetchType.EAGER, targetEntity = Servidor.class)
     @JoinColumn(name = "cod_servidor", nullable = false)
-	private Servidor servidor;
+    private Servidor servidor;
     
     @ManyToOne(fetch = FetchType.EAGER, targetEntity = Usuario.class)
     @JoinColumn(name = "cod_usuario", nullable = false)
-	private Usuario usuario;
+    private Usuario usuario;
     
 	@Column(name = "desc_rede")
 	@Length(max = 255, message = "Descrição deve conter até 255 caracteres.")
