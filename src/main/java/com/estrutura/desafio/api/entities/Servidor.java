@@ -98,6 +98,11 @@ public class Servidor {
 	public TipoServidorEnum getTipoServidor() {
 		return tipoServidor;
 	}
+	
+	@Transient
+	public String getNomeTipoServidor() {
+		return TipoServidorEnum.getNomeTipoServidor(tipoServidor);
+	}
 
 	public void setTipoServidor(TipoServidorEnum tipoServidor) {
 		this.tipoServidor = tipoServidor;
