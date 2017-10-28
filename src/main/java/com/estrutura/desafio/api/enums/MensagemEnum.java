@@ -14,7 +14,10 @@ public enum MensagemEnum {
 	TIPO_DO_SERVIDOR_NAO_EXISTE("Tipo do servidor é inválido, tente novamente."),
 	SERVIDOR_NAO_PERTENCE_A_REDE("Servidor não esta cadastrado em nenhuma rede."),
 	USUARIO_NAO_PODE_SER_EXCLUIDO("Usuário não pode ser excluido."),
-	SERVIDOR_NAO_PODE_SER_EXCLUIDO("Servidor não pode ser excluido.");
+	SERVIDOR_NAO_PODE_SER_EXCLUIDO("Servidor não pode ser excluido."),
+	USUARIO_JA_EXISTE("Usuário já cadastrado."),
+	SERVIDOR_JA_EXISTE("Servidor com o mesmo IP já cadastrado."),
+	NENHUM_ID_DO_SERVIDOR("Servidor não está cadastro do sistema.");
 	
 	private String mensagem;
 	

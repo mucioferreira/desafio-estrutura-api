@@ -16,18 +16,10 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
-import org.hibernate.validator.constraints.Length;
-import org.hibernate.validator.constraints.NotEmpty;
-
 import com.estrutura.desafio.api.enums.TipoServidorEnum;
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 @Entity
 @Table(name = "tb_servidor")
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property="@id")
 public class Servidor {
 
 	@Id
@@ -36,12 +28,9 @@ public class Servidor {
 	private Long id;
 	
 	@Column(name = "nme_servidor", nullable = false)
-	@NotEmpty(message = "Nome não pode ser vazio.")
-	@Length(min = 3, max = 100, message = "Nome deve conter entre 3 e 100 caracteres.")
 	private String nome;
 	
 	@Column(name = "ip_servidor", nullable = false)
-	@NotEmpty(message = "IP não pode ser vazio.")
 	private String ip;
 	
 	@Enumerated(EnumType.STRING)
@@ -52,7 +41,6 @@ public class Servidor {
 	private List<NoDaRede> noDaRede;
 	
 	@OneToMany(mappedBy = "servidor", fetch = FetchType.LAZY, cascade = CascadeType.ALL, targetEntity = UsuarioDaRede.class)
-	@JsonBackReference
 	private List<UsuarioDaRede> usuarioDaRede;
 	
 	public Servidor() {}
@@ -75,7 +63,6 @@ public class Servidor {
 	}
 	
 	@Transient
-	@JsonIgnore
 	public Optional<Long> getIdOpt() {
 		return Optional.of(id);
 	}
@@ -102,11 +89,6 @@ public class Servidor {
 
 	public TipoServidorEnum getTipoServidor() {
 		return tipoServidor;
-	}
-	
-	@Transient
-	public String getNomeTipoServidor() {
-		return TipoServidorEnum.getNomeTipoServidor(tipoServidor);
 	}
 
 	public void setTipoServidor(TipoServidorEnum tipoServidor) {

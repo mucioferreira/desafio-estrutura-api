@@ -4,13 +4,13 @@ USE bd_desafio_ed;
 CREATE TABLE tb_servidor(
 	idt_servidor INT PRIMARY KEY AUTO_INCREMENT,
     nme_servidor VARCHAR(255) NOT NULL,
-    ip_servidor VARCHAR(100) NOT NULL,
+    ip_servidor VARCHAR(100) NOT NULL UNIQUE,
 	tipo_servidor varchar(255) NOT NULL
 );
 
 CREATE TABLE tb_usuario(
 	idt_usuario INT PRIMARY KEY AUTO_INCREMENT,
-    nme_usuario VARCHAR(100) NOT NULL
+    nme_usuario VARCHAR(100) NOT NULL UNIQUE
 );
 
 CREATE TABLE ta_no_rede(
