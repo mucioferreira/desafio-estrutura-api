@@ -127,7 +127,7 @@ public class UsuarioController {
 	}
 	
 	private UsuarioDTO converterParaDTO(Usuario usuario) {
-		return new UsuarioDTO(usuario.getId(), usuario.getNome(), usuario.getUsuarioDaRede());
+		return new UsuarioDTO(usuario.getId(), usuario.getNome());
 	}
 	
 	private void validarDadosExistentes(UsuarioDTO usuarioDto, BindingResult result) {

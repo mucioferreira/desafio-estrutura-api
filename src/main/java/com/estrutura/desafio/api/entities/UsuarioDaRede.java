@@ -41,15 +41,13 @@ public class UsuarioDaRede {
 		this.descricaoDaRede = descricaoDaRede;
 	}
 
-	public UsuarioDaRede(Long id, Servidor servidor, Usuario usuario, String descricaoDaRede) {
-		this.id = id;
-		this.servidor = servidor;
-		this.usuario = usuario;
-		this.descricaoDaRede = descricaoDaRede;
-	}
-
 	public Long getId() {
 		return id;
+	}
+	
+	@Transient
+	public Optional<Long> getIdOpt() {
+		return Optional.of(id);
 	}
 
 	public void setId(Long id) {
@@ -59,11 +57,6 @@ public class UsuarioDaRede {
 	public Servidor getServidor() {
 		return servidor;
 	}
-    
-    @Transient
-	public Optional<Servidor> getServidorOpt() {
-		return Optional.of(servidor);
-	}
 
 	public void setServidor(Servidor servidor) {
 		this.servidor = servidor;
@@ -72,11 +65,6 @@ public class UsuarioDaRede {
 	public Usuario getUsuario() {
 		return usuario;
 	}
-    
-    @Transient
-	public Optional<Usuario> getUsuarioOpt() {
-		return Optional.of(usuario);
-	}
 
 	public void setUsuario(Usuario usuario) {
 		this.usuario = usuario;
@@ -84,6 +72,11 @@ public class UsuarioDaRede {
 
 	public String getDescricaoDaRede() {
 		return descricaoDaRede;
+	}
+	
+    @Transient
+	public Optional<String> getDescricaoDaRedeOpt() {
+		return Optional.of(descricaoDaRede);
 	}
 
 	public void setDescricaoDaRede(String descricaoDaRede) {

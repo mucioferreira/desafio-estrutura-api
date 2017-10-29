@@ -136,7 +136,7 @@ public class ServidorController {
 	}
 	
 	private ServidorDTO converterParaDTO(Servidor servidor) {
-		return new ServidorDTO(servidor.getId(), servidor.getNome(), servidor.getIp(), servidor.getTipoServidor(), servidor.getNoDaRede(), servidor.getUsuarioDaRede());
+		return new ServidorDTO(servidor.getId(), servidor.getNome(), servidor.getIp(), servidor.getTipoServidor());
 	}
 	
 	private Servidor modificarServidor(Servidor servidor, ServidorDTO servidorDto) {

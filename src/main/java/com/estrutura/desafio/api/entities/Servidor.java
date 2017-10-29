@@ -1,18 +1,14 @@
 package com.estrutura.desafio.api.entities;
 
-import java.util.List;
 import java.util.Optional;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
@@ -37,11 +33,11 @@ public class Servidor {
 	@Column(name = "tipo", nullable = false)
 	private TipoServidorEnum tipo;
 
-	@OneToMany(mappedBy = "servidor", fetch = FetchType.EAGER, cascade = CascadeType.ALL, targetEntity = NoDaRede.class)
-	private List<NoDaRede> noDaRede;
-	
-	@OneToMany(mappedBy = "servidor", fetch = FetchType.LAZY, cascade = CascadeType.ALL, targetEntity = UsuarioDaRede.class)
-	private List<UsuarioDaRede> usuarioDaRede;
+//	@OneToMany(mappedBy = "servidor", fetch = FetchType.EAGER, cascade = CascadeType.ALL, targetEntity = NoDaRede.class)
+//	private List<NoDaRede> noDaRede;
+//	
+//	@OneToMany(mappedBy = "servidor", fetch = FetchType.LAZY, cascade = CascadeType.ALL, targetEntity = UsuarioDaRede.class)
+//	private List<UsuarioDaRede> usuarioDaRede;
 	
 	public Servidor() {}
 	
@@ -93,22 +89,6 @@ public class Servidor {
 
 	public void setTipoServidor(TipoServidorEnum tipo) {
 		this.tipo = tipo;
-	}
-
-	public List<NoDaRede> getNoDaRede() {
-		return noDaRede;
-	}
-
-	public void setNoDaRede(List<NoDaRede> noDaRede) {
-		this.noDaRede = noDaRede;
-	}
-
-	public List<UsuarioDaRede> getUsuarioDaRede() {
-		return usuarioDaRede;
-	}
-
-	public void setUsuarioDaRede(List<UsuarioDaRede> usuarioDaRede) {
-		this.usuarioDaRede = usuarioDaRede;
 	}
 	
 }

@@ -23,32 +23,20 @@ public class UsuarioDaRedeDTO {
 	
 	public UsuarioDaRedeDTO() {
 		this.id = Optional.empty();
+		this.descricaoDaRede = new String();
 	}
 	
-	public UsuarioDaRedeDTO(Long id, Long servidor, Long usuario, String descricaoDaRede) {
-		this.id = Optional.of(id);
-		this.servidor = servidor;
-		this.usuario = usuario;
-		this.descricaoDaRede = descricaoDaRede;
-	}
-	
-	public UsuarioDaRedeDTO(Long servidor, Long usuario, String descricaoDaRede) {
-		this.servidor = servidor;
-		this.usuario = usuario;
-		this.descricaoDaRede = descricaoDaRede;
-	}
-
 	public Long getId() {
 		return id.get();
 	}
-	
-    @JsonIgnore
+
+	@JsonIgnore
 	public Optional<Long> getIdOpt() {
 		return id;
 	}
 
-	public void setId(Optional<Long> id) {
-		this.id = id;
+	public void setId(Long id) {
+		this.id = Optional.of(id);
 	}
 
 	public Long getServidor() {

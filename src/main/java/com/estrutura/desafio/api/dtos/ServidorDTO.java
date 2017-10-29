@@ -1,6 +1,5 @@
 package com.estrutura.desafio.api.dtos;
 
-import java.util.List;
 import java.util.Optional;
 
 import javax.validation.constraints.NotNull;
@@ -8,8 +7,6 @@ import javax.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
 
-import com.estrutura.desafio.api.entities.NoDaRede;
-import com.estrutura.desafio.api.entities.UsuarioDaRede;
 import com.estrutura.desafio.api.enums.TipoServidorEnum;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -28,20 +25,15 @@ public class ServidorDTO {
 	@NotNull(message = "Tipo do Servidor não pode ser vazio.")
 	private TipoServidorEnum tipoServidor;
 	
-	private List<NoDaRede> noDaRede;
-	private List<UsuarioDaRede> usuarioDaRede;
-	
 	public ServidorDTO() {
 		this.id = Optional.empty();
 	}
 	
-	public ServidorDTO(Long id, String nome, String ip, TipoServidorEnum tipoServidor, List<NoDaRede> noDaRede, List<UsuarioDaRede> usuarioDaRede) {
+	public ServidorDTO(Long id, String nome, String ip, TipoServidorEnum tipoServidor) {
 		this.id = Optional.of(id);
 		this.nome = nome;
 		this.ip = ip;
 		this.tipoServidor = tipoServidor;
-		this.noDaRede = noDaRede;
-		this.usuarioDaRede = usuarioDaRede;
 	}
 
 	public Long getId() {
@@ -83,22 +75,6 @@ public class ServidorDTO {
 	
 	public void setTipoServidor(TipoServidorEnum tipoServidor) {
 		this.tipoServidor = tipoServidor;
-	}
-	
-	public List<NoDaRede> getNoDaRede() {
-		return noDaRede;
-	}
-	
-	public void setNoDaRede(List<NoDaRede> noDaRede) {
-		this.noDaRede = noDaRede;
-	}
-	
-	public List<UsuarioDaRede> getUsuarioDaRede() {
-		return usuarioDaRede;
-	}
-	
-	public void setUsuarioDaRede(List<UsuarioDaRede> usuarioDaRede) {
-		this.usuarioDaRede = usuarioDaRede;
 	}
 	
 }
