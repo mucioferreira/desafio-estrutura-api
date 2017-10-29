@@ -1,33 +1,31 @@
-CREATE DATABASE bd_desafio_ed;
-USE bd_desafio_ed;
-
-CREATE TABLE tb_servidor(
-	idt_servidor INT PRIMARY KEY AUTO_INCREMENT,
-    nme_servidor VARCHAR(255) NOT NULL,
-    ip_servidor VARCHAR(100) NOT NULL UNIQUE,
-	tipo_servidor varchar(255) NOT NULL
+CREATE TABLE Servidores (
+	id INT PRIMARY KEY AUTO_INCREMENT,
+    nome VARCHAR(100) NOT NULL,
+    ip VARCHAR(100) NOT NULL UNIQUE,
+	tipo varchar(100) NOT NULL
 );
 
-CREATE TABLE tb_usuario(
-	idt_usuario INT PRIMARY KEY AUTO_INCREMENT,
-    nme_usuario VARCHAR(100) NOT NULL UNIQUE
+CREATE TABLE Usuarios (
+	id INT PRIMARY KEY AUTO_INCREMENT,
+    nome VARCHAR(100) NOT NULL UNIQUE
 );
 
-CREATE TABLE ta_no_rede(
-	idt_no_rede INT PRIMARY KEY AUTO_INCREMENT,
-    cod_primeiro_servidor INT NOT NULL,
-    cod_segundo_servidor INT NOT NULL,
-    desc_no_rede TEXT,
-    CONSTRAINT fk_primeiro_servidor FOREIGN KEY (cod_primeiro_servidor) REFERENCES tb_servidor(idt_servidor),
-    CONSTRAINT fk_segundo_servidor FOREIGN KEY (cod_segundo_servidor) REFERENCES tb_servidor(idt_servidor) 
+CREATE TABLE NosDaRede (
+	id INT PRIMARY KEY AUTO_INCREMENT,
+    servidor INT NOT NULL,
+    proximo_no INT,
+    ambiente VARCHAR(100) NOT NULL,
+    descricao TEXT,
+    CONSTRAINT fk_servidor FOREIGN KEY (servidor) REFERENCES Servidores(id),
+    CONSTRAINT fk_proximo_no FOREIGN KEY (proximo_no) REFERENCES NosDaRede(id) 
 );
 
-CREATE TABLE ta_usuario_rede (
-	idt_usuario_rede INT PRIMARY KEY AUTO_INCREMENT,
-    cod_servidor INT NOT NULL,
-    cod_usuario INT NOT NULL,
-    desc_rede TEXT,
-    CONSTRAINT fk_servidor FOREIGN KEY (cod_servidor) REFERENCES tb_servidor(idt_servidor),
-    CONSTRAINT fk_usuario FOREIGN KEY (cod_usuario) REFERENCES tb_usuario(idt_usuairo) 
+CREATE TABLE UsuariosDaRede (
+	id INT PRIMARY KEY AUTO_INCREMENT,
+    servidor INT NOT NULL,
+    usuario INT NOT NULL,
+    descricao TEXT,
+    CONSTRAINT fk_servidor_usuario FOREIGN KEY (servidor) REFERENCES Servidores(id),
+    CONSTRAINT fk_usuario FOREIGN KEY (usuario) REFERENCES Usuarios(id) 
 );
 

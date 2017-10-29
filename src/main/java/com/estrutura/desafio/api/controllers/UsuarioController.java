@@ -53,14 +53,19 @@ public class UsuarioController {
 	@PutMapping
 	public ResponseEntity<Response<UsuarioDTO>> modificarUsuario(@Valid @RequestBody UsuarioDTO usuarioDto, BindingResult result) throws NoSuchAlgorithmException {
 		Response<UsuarioDTO> response = new Response<UsuarioDTO>();
+		Optional<Usuario> usuario = Optional.empty();
 		
-		if(!this.buscarUsuario(usuarioDto.getId()).isPresent()) result.addError(new ObjectError("usuario", String.valueOf(MensagemEnum.USUARIO_NAO_ENCONTRADO)));
-		this.validarDadosExistentes(usuarioDto, result);
+		if(!usuarioDto.getIdOpt().isPresent()) result.addError(new ObjectError("usuario", String.valueOf(MensagemEnum.NENHUM_ID_DO_USUARIO)));
+		else usuario = this.usuarioService.findById(usuarioDto.getId());
+		
+		if(usuario.isPresent()) {
+			if(!usuario.get().getNome().equals(usuarioDto.getNome())) this.validarDadosExistentes(usuarioDto, result);
+		} else result.addError(new ObjectError("usuario", String.valueOf(MensagemEnum.USUARIO_NAO_ENCONTRADO)));
 		if(result.hasErrors()) return response.getResponseWithErrors(response, result);
 		
-		Usuario usuario = this.usuarioService.save(this.converterParaUsuario(usuarioDto));
+		Usuario u = this.usuarioService.save(this.converterParaUsuario(usuarioDto));
 		
-		response.setData(this.converterParaDTO(usuario));
+		response.setData(this.converterParaDTO(u));
 		return ResponseEntity.ok(response);
 	}
 	

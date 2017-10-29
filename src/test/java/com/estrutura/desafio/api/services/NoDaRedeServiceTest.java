@@ -18,6 +18,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import com.estrutura.desafio.api.entities.NoDaRede;
 import com.estrutura.desafio.api.entities.Servidor;
+import com.estrutura.desafio.api.enums.AmbienteDaRedeEnum;
 import com.estrutura.desafio.api.enums.TipoServidorEnum;
 
 @RunWith(SpringRunner.class)
@@ -36,14 +37,15 @@ public class NoDaRedeServiceTest {
 	private static final String IP_SERVIDOR_2 = "987654321";
 	private static final String DESCRICAO_REDE = "Teste descricao";
 	
-	private static final Servidor PRIMEIRO_SERVIDOR = new Servidor(NOME_SERVIDOR, IP_SERVIDOR, TipoServidorEnum.PROXY);
-	private static final Servidor SEGUNDO_SERVIDOR = new Servidor(NOME_SERVIDOR, IP_SERVIDOR_2, TipoServidorEnum.SERVIDOR_DE_BANCO);
+	private static final Servidor SERVIDOR = new Servidor(NOME_SERVIDOR, IP_SERVIDOR, TipoServidorEnum.PROXY);
+	private static final Servidor SERVIDOR_2 = new Servidor(NOME_SERVIDOR, IP_SERVIDOR_2, TipoServidorEnum.PROXY);
 	
 	@Before
 	public void setUp() throws Exception {
-		this.servidorService.save(PRIMEIRO_SERVIDOR);
-		this.servidorService.save(SEGUNDO_SERVIDOR);
-		this.noDaRedeService.save(new NoDaRede(this.servidorService.findOne(1L), this.servidorService.findOne(2L), DESCRICAO_REDE));
+		this.servidorService.save(SERVIDOR);
+		this.servidorService.save(SERVIDOR_2);
+		this.noDaRedeService.save(new NoDaRede(this.servidorService.findOne(1L), DESCRICAO_REDE, AmbienteDaRedeEnum.DESENVOLVIMENTO));
+		this.noDaRedeService.save(new NoDaRede(this.servidorService.findOne(1L), this.noDaRedeService.findOne(1L), DESCRICAO_REDE, AmbienteDaRedeEnum.DESENVOLVIMENTO));
 	}
 	
 	@Test
@@ -54,13 +56,13 @@ public class NoDaRedeServiceTest {
 
 	@Test
 	public void testBuscarPorIdDoServidor() throws Exception {
-		Page<NoDaRede> noDaRede = this.noDaRedeService.findByPrimeiroServidorId(1L, new PageRequest(0, 10));
+		Page<NoDaRede> noDaRede = this.noDaRedeService.findByServidorId(1L, new PageRequest(0, 10));
 		assertNotNull(noDaRede);
 	}
 	
 	@Test
 	public void testBuscarPorIpServidor() throws Exception {
-		Page<NoDaRede> noDaRede = this.noDaRedeService.findByPrimeiroServidorIp(IP_SERVIDOR, new PageRequest(0, 10));
+		Page<NoDaRede> noDaRede = this.noDaRedeService.findByServidorIp(IP_SERVIDOR, new PageRequest(0, 10));
 		assertNotNull(noDaRede);
 	}
 

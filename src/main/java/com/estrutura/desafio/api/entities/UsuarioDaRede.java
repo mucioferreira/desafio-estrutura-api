@@ -13,32 +13,24 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
-import org.hibernate.validator.constraints.Length;
-
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-
 @Entity
-@Table(name = "ta_usuario_rede")
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property="id")
+@Table(name = "usuariosdarede")
 public class UsuarioDaRede {
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
-	@Column(name = "idt_usuario_rede")
+	@Column(name = "id")
 	private Long id;
 	
     @ManyToOne(fetch = FetchType.EAGER, targetEntity = Servidor.class)
-    @JoinColumn(name = "cod_servidor", nullable = false)
+    @JoinColumn(name = "servidor", nullable = false)
     private Servidor servidor;
     
     @ManyToOne(fetch = FetchType.EAGER, targetEntity = Usuario.class)
-    @JoinColumn(name = "cod_usuario", nullable = false)
+    @JoinColumn(name = "usuario", nullable = false)
     private Usuario usuario;
     
-	@Column(name = "desc_rede")
-	@Length(max = 255, message = "Descrição deve conter até 255 caracteres.")
+	@Column(name = "descricao")
 	private String descricaoDaRede;
 	
 	public UsuarioDaRede() {	}
@@ -69,7 +61,6 @@ public class UsuarioDaRede {
 	}
     
     @Transient
-    @JsonIgnore
 	public Optional<Servidor> getServidorOpt() {
 		return Optional.of(servidor);
 	}
@@ -83,7 +74,6 @@ public class UsuarioDaRede {
 	}
     
     @Transient
-    @JsonIgnore
 	public Optional<Usuario> getUsuarioOpt() {
 		return Optional.of(usuario);
 	}

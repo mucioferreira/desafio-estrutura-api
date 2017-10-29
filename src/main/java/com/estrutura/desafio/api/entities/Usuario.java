@@ -13,15 +13,15 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "tb_usuario")
+@Table(name = "usuarios")
 public class Usuario {
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
-	@Column(name = "idt_usuario")
+	@Column(name = "id")
 	private Long id;
 	
-	@Column(name = "nme_usuario", nullable = false)
+	@Column(name = "nome", nullable = false)
 	private String nome;
 	
 	@OneToMany(mappedBy = "usuario", fetch = FetchType.EAGER, cascade = CascadeType.ALL, targetEntity = UsuarioDaRede.class)
@@ -45,7 +45,6 @@ public class Usuario {
 	public void setId(Long id) {
 		this.id = id;
 	}
-	
 
 	public String getNome() {
 		return nome;

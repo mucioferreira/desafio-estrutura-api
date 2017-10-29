@@ -58,8 +58,10 @@ public class ServidorController {
 		
 		if(!servidorDto.getIdOpt().isPresent()) result.addError(new ObjectError("servidor", String.valueOf(MensagemEnum.NENHUM_ID_DO_SERVIDOR)));
 		else servidor = this.servidorService.findById(servidorDto.getId());
-		if(!servidor.isPresent()) result.addError(new ObjectError("servidor", String.valueOf(MensagemEnum.SERVIDOR_NAO_ENCONTRADO)));
-		if(!servidor.get().getIp().equals(servidorDto.getIp())) this.validarDadosExistentes(servidorDto, result);
+		if(servidor.isPresent()) {
+			if(!servidor.get().getIp().equals(servidorDto.getIp())) this.validarDadosExistentes(servidorDto, result);
+		} else result.addError(new ObjectError("servidor", String.valueOf(MensagemEnum.SERVIDOR_NAO_ENCONTRADO)));
+		
 		if(result.hasErrors()) return response.getResponseWithErrors(response, result);
 
 		Servidor s = this.servidorService.save(this.modificarServidor(servidor.get(), servidorDto));

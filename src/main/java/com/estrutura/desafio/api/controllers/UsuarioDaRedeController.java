@@ -1,14 +1,11 @@
 package com.estrutura.desafio.api.controllers;
 
 import java.security.NoSuchAlgorithmException;
-import java.util.Optional;
 
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort.Direction;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
@@ -23,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.estrutura.desafio.api.dtos.UsuarioDaRedeDTO;
 import com.estrutura.desafio.api.entities.UsuarioDaRede;
 import com.estrutura.desafio.api.enums.MensagemEnum;
 import com.estrutura.desafio.api.response.Response;
@@ -45,44 +43,50 @@ public class UsuarioDaRedeController {
 	private ServidorService servidorService;
 	
 	@PostMapping
-	public ResponseEntity<Response<UsuarioDaRede>> cadastrarUsuarioDaRede(@Valid @RequestBody UsuarioDaRede usuarioDaRede, BindingResult result) throws NoSuchAlgorithmException {
-		Response<UsuarioDaRede> response = new Response<UsuarioDaRede>();
+	public ResponseEntity<Response<UsuarioDaRedeDTO>> cadastrarUsuarioDaRede(@Valid @RequestBody UsuarioDaRedeDTO usuarioDaRedeDto, BindingResult result) throws NoSuchAlgorithmException {
+		Response<UsuarioDaRedeDTO> response = new Response<UsuarioDaRedeDTO>();
+
+		if(!this.servidorService.findById(usuarioDaRedeDto.getServidor()).isPresent()) result.addError(new ObjectError("servidor", String.valueOf(MensagemEnum.SERVIDOR_NAO_ENCONTRADO)));
 		
-		if(!this.servidorService.findById(usuarioDaRede.getServidor().getId()).isPresent()) result.addError(new ObjectError("servidor", String.valueOf(MensagemEnum.SERVIDOR_NAO_ENCONTRADO)));
-		if(!this.usuarioService.findById(usuarioDaRede.getUsuario().getId()).isPresent()) result.addError(new ObjectError("usuario", String.valueOf(MensagemEnum.USUARIO_NAO_ENCONTRADO)));
-		if(result.hasErrors()) return response.getResponseWithErrors(response, result);
-		else usuarioDaRede = this.usuarioDaRedeService.save(usuarioDaRede);
-		
-		response.setData(usuarioDaRede);
+//		if(!this.usuarioService.findById(usuarioDaRede.getUsuario().getId()).isPresent()) result.addError(new ObjectError("usuario", String.valueOf(MensagemEnum.USUARIO_NAO_ENCONTRADO)));
+//		if(result.hasErrors()) return response.getResponseWithErrors(response, result);
+//		else usuarioDaRede = this.usuarioDaRedeService.save(usuarioDaRede);
+//		
+//		response.setData(usuarioDaRede);
 		return ResponseEntity.ok(response);
 	}
 	
 	@PutMapping
 	public ResponseEntity<Response<UsuarioDaRede>> modificarUsuarioDaRede(@Valid @RequestBody UsuarioDaRede usuarioDaRede, BindingResult result) throws NoSuchAlgorithmException {
-		Response<UsuarioDaRede> response = new Response<UsuarioDaRede>();
-	
-		if(!this.usuarioDaRedeService.findById(usuarioDaRede.getId()).isPresent()) result.addError(new ObjectError("noDaRede", String.valueOf(MensagemEnum.USUARIO_DA_REDE_NAO_ENCONTRADO)));
-		if(!this.servidorService.findById(usuarioDaRede.getServidor().getId()).isPresent()) result.addError(new ObjectError("servidor", String.valueOf(MensagemEnum.SERVIDOR_NAO_ENCONTRADO)));
-		if(!this.usuarioService.findById(usuarioDaRede.getUsuario().getId()).isPresent()) result.addError(new ObjectError("usuario", String.valueOf(MensagemEnum.USUARIO_NAO_ENCONTRADO)));
-		if(result.hasErrors()) return response.getResponseWithErrors(response, result);
-		else usuarioDaRede = this.usuarioDaRedeService.save(usuarioDaRede);
+		//TODO modificarUsuarioDaRede
+		return null;
 		
-		response.setData(usuarioDaRede);
-		return ResponseEntity.ok(response);
+//		Response<UsuarioDaRede> response = new Response<UsuarioDaRede>();
+//	
+//		if(!this.usuarioDaRedeService.findById(usuarioDaRede.getId()).isPresent()) result.addError(new ObjectError("noDaRede", String.valueOf(MensagemEnum.USUARIO_DA_REDE_NAO_ENCONTRADO)));
+//		if(!this.servidorService.findById(usuarioDaRede.getServidor().getId()).isPresent()) result.addError(new ObjectError("servidor", String.valueOf(MensagemEnum.SERVIDOR_NAO_ENCONTRADO)));
+//		if(!this.usuarioService.findById(usuarioDaRede.getUsuario().getId()).isPresent()) result.addError(new ObjectError("usuario", String.valueOf(MensagemEnum.USUARIO_NAO_ENCONTRADO)));
+//		if(result.hasErrors()) return response.getResponseWithErrors(response, result);
+//		else usuarioDaRede = this.usuarioDaRedeService.save(usuarioDaRede);
+//		
+//		response.setData(usuarioDaRede);
+//		return ResponseEntity.ok(response);
 	}
 	
 	@GetMapping(value = "/{id}")
 	public ResponseEntity<Response<UsuarioDaRede>> procurarUsuarioDaRedePeloId(@PathVariable("id") Long id) throws NoSuchAlgorithmException {
-		Response<UsuarioDaRede> response = new Response<UsuarioDaRede>();
-		Optional<UsuarioDaRede> usuarioDaRede = this.usuarioDaRedeService.findById(id);
-		
-		if(!usuarioDaRede.isPresent()) {
-			response.getErrors().add(String.valueOf(MensagemEnum.USUARIO_DA_REDE_NAO_ENCONTRADO));
-			return ResponseEntity.badRequest().body(response);
-		}
-			
-		response.setData(usuarioDaRede.get());
-		return ResponseEntity.ok(response);
+		// TODO procurarUsuarioDaRedePeloId
+		return null;
+//		Response<UsuarioDaRede> response = new Response<UsuarioDaRede>();
+//		Optional<UsuarioDaRede> usuarioDaRede = this.usuarioDaRedeService.findById(id);
+//		
+//		if(!usuarioDaRede.isPresent()) {
+//			response.getErrors().add(String.valueOf(MensagemEnum.USUARIO_DA_REDE_NAO_ENCONTRADO));
+//			return ResponseEntity.badRequest().body(response);
+//		}
+//			
+//		response.setData(usuarioDaRede.get());
+//		return ResponseEntity.ok(response);
 	} 
 	
 	@GetMapping(value = "/usuario/{id}")
@@ -92,7 +96,9 @@ public class UsuarioDaRedeController {
 			@RequestParam(value = "qtdPagina", defaultValue = "10") int qtdPagina,
 			@RequestParam(value = "ordem", defaultValue = "id") String ordem,
 			@RequestParam(value = "direcao", defaultValue = "DESC") String direcao) throws NoSuchAlgorithmException {
-		return this.verificarBuscaDoUsuarioDaRede(new Response<Page<UsuarioDaRede>>(), this.usuarioDaRedeService.findByUsuarioId(id, new PageRequest(pagina, qtdPagina, Direction.valueOf(direcao), ordem)));
+		// TODO procurarUsuarioDaRedePeloIdDoUsuario
+		return null;
+//		return this.verificarBuscaDoUsuarioDaRede(new Response<Page<UsuarioDaRede>>(), this.usuarioDaRedeService.findByUsuarioId(id, new PageRequest(pagina, qtdPagina, Direction.valueOf(direcao), ordem)));
 	}
 	
 	@GetMapping(value = "/servidor/{id}")
@@ -102,7 +108,9 @@ public class UsuarioDaRedeController {
 			@RequestParam(value = "qtdPagina", defaultValue = "10") int qtdPagina,
 			@RequestParam(value = "ordem", defaultValue = "id") String ordem,
 			@RequestParam(value = "direcao", defaultValue = "DESC") String direcao) throws NoSuchAlgorithmException {
-		return this.verificarBuscaDoUsuarioDaRede(new Response<Page<UsuarioDaRede>>(), this.usuarioDaRedeService.findByServidorId(id, new PageRequest(pagina, qtdPagina, Direction.valueOf(direcao), ordem)));
+		// TODO procurarUsuarioDaRedePeloIdDoServidor
+		return null;
+//		return this.verificarBuscaDoUsuarioDaRede(new Response<Page<UsuarioDaRede>>(), this.usuarioDaRedeService.findByServidorId(id, new PageRequest(pagina, qtdPagina, Direction.valueOf(direcao), ordem)));
 	}
 	
 	@GetMapping(value = "/servidor/ip/{ip}")
@@ -112,20 +120,24 @@ public class UsuarioDaRedeController {
 			@RequestParam(value = "qtdPagina", defaultValue = "10") int qtdPagina,
 			@RequestParam(value = "ordem", defaultValue = "id") String ordem,
 			@RequestParam(value = "direcao", defaultValue = "DESC") String direcao) throws NoSuchAlgorithmException {
-		return this.verificarBuscaDoUsuarioDaRede(new Response<Page<UsuarioDaRede>>(), this.usuarioDaRedeService.findByServidorIp(ip, new PageRequest(pagina, qtdPagina, Direction.valueOf(direcao), ordem)));
+		// TODO procurarUsuarioDaRedePeloIpDoServidor
+		return null;
+//		return this.verificarBuscaDoUsuarioDaRede(new Response<Page<UsuarioDaRede>>(), this.usuarioDaRedeService.findByServidorIp(ip, new PageRequest(pagina, qtdPagina, Direction.valueOf(direcao), ordem)));
 	}
 	
 	@DeleteMapping
 	public ResponseEntity<Response<UsuarioDaRede>> deletarServidor(@RequestBody UsuarioDaRede usuarioDaRede) throws NoSuchAlgorithmException {
-		Response<UsuarioDaRede> response = new Response<UsuarioDaRede>();
-		
-		if(!this.usuarioDaRedeService.findById(usuarioDaRede.getId()).isPresent()) {
-			response.getErrors().add(String.valueOf(MensagemEnum.USUARIO_DA_REDE_NAO_ENCONTRADO));
-			return ResponseEntity.badRequest().body(response);
-		}
-			
-		this.usuarioDaRedeService.delete(usuarioDaRede);
-		return ResponseEntity.ok(response);
+		// TODO deletarServidor
+		return null;
+//		Response<UsuarioDaRede> response = new Response<UsuarioDaRede>();
+//		
+//		if(!this.usuarioDaRedeService.findById(usuarioDaRede.getId()).isPresent()) {
+//			response.getErrors().add(String.valueOf(MensagemEnum.USUARIO_DA_REDE_NAO_ENCONTRADO));
+//			return ResponseEntity.badRequest().body(response);
+//		}
+//			
+//		this.usuarioDaRedeService.delete(usuarioDaRede);
+//		return ResponseEntity.ok(response);
 	}
 	
 	private ResponseEntity<Response<Page<UsuarioDaRede>>> verificarBuscaDoUsuarioDaRede(Response<Page<UsuarioDaRede>> response, Page<UsuarioDaRede> usuarioDaRede) {
@@ -137,6 +149,14 @@ public class UsuarioDaRedeController {
 		response.setData(usuarioDaRede);
 		return ResponseEntity.ok(response);
 	}
+	
+	
+	
+	
+	
+	
+	
+	
 	
 
 

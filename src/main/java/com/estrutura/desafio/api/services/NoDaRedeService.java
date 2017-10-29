@@ -15,13 +15,13 @@ import com.estrutura.desafio.api.entities.NoDaRede;
 
 @Transactional(readOnly = true)
 @NamedQueries({
-	@NamedQuery(name = "ServidorService.findById", query = "SELECT rede FROM NoDaRede rede WHERE rede.primeiroServidor.id = :primeiroServidorId"),
-	@NamedQuery(name = "ServidorService.findByIp", query = "SELECT rede FROM NoDaRede rede WHERE rede.primeiroServidor.ip = :primeiroServidorIp")
+	@NamedQuery(name = "ServidorService.findById", query = "SELECT rede FROM NoDaRede rede WHERE rede.servidor.id = :servidorId"),
+	@NamedQuery(name = "ServidorService.findByIp", query = "SELECT rede FROM NoDaRede rede WHERE rede.servidor.ip = :servidorIp")
 })
 public interface NoDaRedeService extends JpaRepository<NoDaRede, Long>{
 
 	Optional<NoDaRede> findById(Long id);
-	Page<NoDaRede> findByPrimeiroServidorId(@Param("primeiroServidorId") Long id, Pageable page);
-	Page<NoDaRede> findByPrimeiroServidorIp(@Param("primeiroServidorIp") String ip, Pageable page);
+	Page<NoDaRede> findByServidorId(@Param("servidorId") Long id, Pageable page);
+	Page<NoDaRede> findByServidorIp(@Param("servidorIp") String ip, Pageable page);
 
 }

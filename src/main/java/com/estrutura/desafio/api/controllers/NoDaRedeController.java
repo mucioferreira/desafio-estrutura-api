@@ -1,17 +1,13 @@
 package com.estrutura.desafio.api.controllers;
 
 import java.security.NoSuchAlgorithmException;
-import java.util.Optional;
 
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort.Direction;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -42,43 +38,49 @@ public class NoDaRedeController {
 	
 	@PostMapping
 	public ResponseEntity<Response<NoDaRede>> cadastrarNoDaRede(@Valid @RequestBody NoDaRede noDaRede, BindingResult result) throws NoSuchAlgorithmException {
-		Response<NoDaRede> response = new Response<NoDaRede>();
-		
-		if(!this.servidorService.findById(noDaRede.getPrimeiroServidor().getId()).isPresent()) result.addError(new ObjectError("primeiroServidor", String.valueOf(MensagemEnum.PRIMEIRO_SERVIDOR_NAO_ENCONTRADO)));
-		if(!this.servidorService.findById(noDaRede.getSegundoServidor().getId()).isPresent()) result.addError(new ObjectError("segundoServidor", String.valueOf(MensagemEnum.SEGUNDO_SERVIDOR_NAO_ENCONTRADO)));
-		if(result.hasErrors()) return response.getResponseWithErrors(response, result);
-		else noDaRede = this.noDaRedeService.save(noDaRede);
-		
-		response.setData(noDaRede);
-		return ResponseEntity.ok(response);
+		// TODO cadastrarNoDaRede
+		return null;
+//		Response<NoDaRede> response = new Response<NoDaRede>();
+//		
+//		if(!this.servidorService.findById(noDaRede.getServidor().getId()).isPresent()) result.addError(new ObjectError("primeiroServidor", String.valueOf(MensagemEnum.PRIMEIRO_SERVIDOR_NAO_ENCONTRADO)));
+//		if(!this.noDaRedeService.findById(noDaRede.getProximoNo().getId()).isPresent()) result.addError(new ObjectError("segundoServidor", String.valueOf(MensagemEnum.SEGUNDO_SERVIDOR_NAO_ENCONTRADO)));
+//		if(result.hasErrors()) return response.getResponseWithErrors(response, result);
+//		else noDaRede = this.noDaRedeService.save(noDaRede);
+//		
+//		response.setData(noDaRede);
+//		return ResponseEntity.ok(response);
 	}
-	
+
 	@PutMapping
 	public ResponseEntity<Response<NoDaRede>> modificarNoDaRede(@Valid @RequestBody NoDaRede noDaRede, BindingResult result) throws NoSuchAlgorithmException {
-		Response<NoDaRede> response = new Response<NoDaRede>();
-	
-		if(!this.noDaRedeService.findById(noDaRede.getId()).isPresent()) result.addError(new ObjectError("noDaRede", String.valueOf(MensagemEnum.NO_DA_REDE_NAO_ENCONTRADO)));
-		if(!this.servidorService.findById(noDaRede.getPrimeiroServidor().getId()).isPresent()) result.addError(new ObjectError("primeiroServidor", String.valueOf(MensagemEnum.PRIMEIRO_SERVIDOR_NAO_ENCONTRADO)));
-		if(!this.servidorService.findById(noDaRede.getSegundoServidor().getId()).isPresent()) result.addError(new ObjectError("segundoServidor", String.valueOf(MensagemEnum.SEGUNDO_SERVIDOR_NAO_ENCONTRADO)));
-		if(result.hasErrors()) return response.getResponseWithErrors(response, result);
-		else noDaRede = this.noDaRedeService.save(noDaRede);
-		
-		response.setData(noDaRede);
-		return ResponseEntity.ok(response);
+		// TODO modificarNoDaRede
+		return null;
+//		Response<NoDaRede> response = new Response<NoDaRede>();
+//	
+//		if(!this.noDaRedeService.findById(noDaRede.getId()).isPresent()) result.addError(new ObjectError("noDaRede", String.valueOf(MensagemEnum.NO_DA_REDE_NAO_ENCONTRADO)));
+//		if(!this.servidorService.findById(noDaRede.getServidor().getId()).isPresent()) result.addError(new ObjectError("primeiroServidor", String.valueOf(MensagemEnum.PRIMEIRO_SERVIDOR_NAO_ENCONTRADO)));
+//		if(!this.noDaRedeService.findById(noDaRede.getProximoNo().getId()).isPresent()) result.addError(new ObjectError("segundoServidor", String.valueOf(MensagemEnum.SEGUNDO_SERVIDOR_NAO_ENCONTRADO)));
+//		if(result.hasErrors()) return response.getResponseWithErrors(response, result);
+//		else noDaRede = this.noDaRedeService.save(noDaRede);
+//		
+//		response.setData(noDaRede);
+//		return ResponseEntity.ok(response);
 	}
 	
 	@GetMapping(value = "/{id}")
 	public ResponseEntity<Response<NoDaRede>> procurarNoDaRedePeloId(@PathVariable("id") Long id) throws NoSuchAlgorithmException {
-		Response<NoDaRede> response = new Response<NoDaRede>();
-		Optional<NoDaRede> noDaRede = this.noDaRedeService.findById(id);
-		
-		if(!noDaRede.isPresent()) {
-			response.getErrors().add(String.valueOf(MensagemEnum.NO_DA_REDE_NAO_ENCONTRADO));
-			return ResponseEntity.badRequest().body(response);
-		}
-			
-		response.setData(noDaRede.get());
-		return ResponseEntity.ok(response);
+		// TODO procurarNoDaRedePeloId
+		return null;
+//		Response<NoDaRede> response = new Response<NoDaRede>();
+//		Optional<NoDaRede> noDaRede = this.noDaRedeService.findById(id);
+//		
+//		if(!noDaRede.isPresent()) {
+//			response.getErrors().add(String.valueOf(MensagemEnum.NO_DA_REDE_NAO_ENCONTRADO));
+//			return ResponseEntity.badRequest().body(response);
+//		}
+//			
+//		response.setData(noDaRede.get());
+//		return ResponseEntity.ok(response);
 	} 
 	
 	@GetMapping(value = "/servidor/{id}")
@@ -88,7 +90,9 @@ public class NoDaRedeController {
 			@RequestParam(value = "qtdPagina", defaultValue = "10") int qtdPagina,
 			@RequestParam(value = "ordem", defaultValue = "id") String ordem,
 			@RequestParam(value = "direcao", defaultValue = "DESC") String direcao) throws NoSuchAlgorithmException {
-		return this.verificarBuscaDoNoDaRede(new Response<Page<NoDaRede>>(), this.noDaRedeService.findByPrimeiroServidorId(id, new PageRequest(pagina, qtdPagina, Direction.valueOf(direcao), ordem)));
+		// TODO procurarNoDaRedePeloIdDoServidor
+		return null;
+//		return this.verificarBuscaDoNoDaRede(new Response<Page<NoDaRede>>(), this.noDaRedeService.findByServidorId(id, new PageRequest(pagina, qtdPagina, Direction.valueOf(direcao), ordem)));
 	}
 	
 	@GetMapping(value = "/servidor/ip/{ip}")
@@ -98,20 +102,24 @@ public class NoDaRedeController {
 			@RequestParam(value = "qtdPagina", defaultValue = "10") int qtdPagina,
 			@RequestParam(value = "ordem", defaultValue = "id") String ordem,
 			@RequestParam(value = "direcao", defaultValue = "DESC") String direcao) throws NoSuchAlgorithmException {
-		return this.verificarBuscaDoNoDaRede(new Response<Page<NoDaRede>>(), this.noDaRedeService.findByPrimeiroServidorIp(ip, new PageRequest(pagina, qtdPagina, Direction.valueOf(direcao), ordem)));
+		// TODO procurarNoDaRedePeloIpDoServidor
+		return null;
+//		return this.verificarBuscaDoNoDaRede(new Response<Page<NoDaRede>>(), this.noDaRedeService.findByServidorIp(ip, new PageRequest(pagina, qtdPagina, Direction.valueOf(direcao), ordem)));
 	}
 	
 	@DeleteMapping
 	public ResponseEntity<Response<NoDaRede>> deletarNoDaRede(@RequestBody NoDaRede noDaRede) throws NoSuchAlgorithmException {
-		Response<NoDaRede> response = new Response<NoDaRede>();
-		
-		if(!this.noDaRedeService.findById(noDaRede.getId()).isPresent()) {
-			response.getErrors().add(String.valueOf(MensagemEnum.NO_DA_REDE_NAO_ENCONTRADO));
-			return ResponseEntity.badRequest().body(response);
-		}
-			
-		this.noDaRedeService.delete(noDaRede);
-		return ResponseEntity.ok(response);
+		// TODO deletarNoDaRede
+		return null;
+//		Response<NoDaRede> response = new Response<NoDaRede>();
+//		
+//		if(!this.noDaRedeService.findById(noDaRede.getId()).isPresent()) {
+//			response.getErrors().add(String.valueOf(MensagemEnum.NO_DA_REDE_NAO_ENCONTRADO));
+//			return ResponseEntity.badRequest().body(response);
+//		}
+//			
+//		this.noDaRedeService.delete(noDaRede);
+//		return ResponseEntity.ok(response);
 	}
 	
 	private ResponseEntity<Response<Page<NoDaRede>>> verificarBuscaDoNoDaRede(Response<Page<NoDaRede>> response, Page<NoDaRede> noDaRede) {

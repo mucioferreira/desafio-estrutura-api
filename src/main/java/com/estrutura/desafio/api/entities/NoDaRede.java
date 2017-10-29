@@ -10,46 +10,59 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import org.hibernate.validator.constraints.Length;
-
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.estrutura.desafio.api.enums.AmbienteDaRedeEnum;
 
 @Entity
-@Table(name = "ta_no_rede")
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property="id")
+@Table(name = "nosdarede")
 public class NoDaRede {
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
-	@Column(name = "idt_no_rede")
+	@Column(name = "id")
 	private Long id;
 	
 	@ManyToOne(fetch = FetchType.EAGER, targetEntity = Servidor.class)
-	@JoinColumn(name = "cod_primeiro_servidor", nullable = false)
-	private Servidor primeiroServidor;
+	@JoinColumn(name = "servidor", nullable = false)
+	private Servidor servidor;
 	
-	@ManyToOne(fetch = FetchType.EAGER, targetEntity = Servidor.class)
-	@JoinColumn(name = "cod_segundo_servidor", nullable = false)
-	private Servidor segundoServidor;
+	@ManyToOne(fetch = FetchType.EAGER, targetEntity = NoDaRede.class)
+	@JoinColumn(name = "proximo_no")
+	private NoDaRede proximoNo;
 	
-	@Column(name = "desc_no_rede")
-	@Length(max = 255, message = "Descrição deve conter até 255 caracteres.")
+	@Column(name = "ambiente", nullable = false)
+	private AmbienteDaRedeEnum ambienteDaRede;
+	
+	@Column(name = "descricao")
 	private String descricaoDaRede;
 	
 	public NoDaRede() {	}
 
-	public NoDaRede(Servidor primeiroServidor, Servidor segundoServidor, String descricaoDaRede) {
-		this.primeiroServidor = primeiroServidor;
-		this.segundoServidor = segundoServidor;
+	public NoDaRede(Servidor servidor, NoDaRede proximoNo, String descricaoDaRede, AmbienteDaRedeEnum ambienteDaRede) {
+		this.servidor = servidor;
+		this.proximoNo = proximoNo;
 		this.descricaoDaRede = descricaoDaRede;
+		this.ambienteDaRede = ambienteDaRede;
+	}
+	
+	public NoDaRede(Servidor servidor, String descricaoDaRede, AmbienteDaRedeEnum ambienteDaRede) {
+		this.servidor = servidor;
+		this.descricaoDaRede = descricaoDaRede;
+		this.ambienteDaRede = ambienteDaRede;
+	}
+	
+	public NoDaRede(Long id, Servidor servidor, String descricaoDaRede, AmbienteDaRedeEnum ambienteDaRede) {
+		this.id = id;
+		this.servidor = servidor;
+		this.descricaoDaRede = descricaoDaRede;
+		this.ambienteDaRede = ambienteDaRede;
 	}
 
-	public NoDaRede(Long id, Servidor primeiroServidor, Servidor segundoServidor, String descricaoDaRede) {
+	public NoDaRede(Long id, Servidor servidor, NoDaRede proximoNo, String descricaoDaRede, AmbienteDaRedeEnum ambienteDaRede) {
 		this.id = id;
-		this.primeiroServidor = primeiroServidor;
-		this.segundoServidor = segundoServidor;
+		this.servidor = servidor;
+		this.proximoNo = proximoNo;
 		this.descricaoDaRede = descricaoDaRede;
+		this.ambienteDaRede = ambienteDaRede;
 	}
 
 	public Long getId() {
@@ -60,20 +73,20 @@ public class NoDaRede {
 		this.id = id;
 	}
 
-	public Servidor getPrimeiroServidor() {
-		return primeiroServidor;
+	public Servidor getServidor() {
+		return servidor;
 	}
 
-	public void setPrimeiroServidor(Servidor primeiroServidor) {
-		this.primeiroServidor = primeiroServidor;
+	public void setServidor(Servidor servidor) {
+		this.servidor = servidor;
 	}
 
-	public Servidor getSegundoServidor() {
-		return segundoServidor;
+	public NoDaRede getProximoNo() {
+		return proximoNo;
 	}
 
-	public void setSegundoServidor(Servidor segundoServidor) {
-		this.segundoServidor = segundoServidor;
+	public void setProximoNo(NoDaRede proximoNo) {
+		this.proximoNo = proximoNo;
 	}
 
 	public String getDescricaoDaRede() {
@@ -82,6 +95,14 @@ public class NoDaRede {
 
 	public void setDescricaoDaRede(String descricaoDaRede) {
 		this.descricaoDaRede = descricaoDaRede;
+	}
+
+	public AmbienteDaRedeEnum getAmbienteDaRede() {
+		return ambienteDaRede;
+	}
+
+	public void setAmbienteDaRede(AmbienteDaRedeEnum ambienteDaRede) {
+		this.ambienteDaRede = ambienteDaRede;
 	}
 	
 }

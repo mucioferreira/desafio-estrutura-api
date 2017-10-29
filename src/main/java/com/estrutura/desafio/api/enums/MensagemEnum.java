@@ -17,7 +17,8 @@ public enum MensagemEnum {
 	SERVIDOR_NAO_PODE_SER_EXCLUIDO("Servidor não pode ser excluido."),
 	USUARIO_JA_EXISTE("Usuário já cadastrado."),
 	SERVIDOR_JA_EXISTE("Servidor com o mesmo IP já cadastrado."),
-	NENHUM_ID_DO_SERVIDOR("Servidor não está cadastro do sistema.");
+	NENHUM_ID_DO_SERVIDOR("Servidor não está cadastro do sistema."),
+	NENHUM_ID_DO_USUARIO("Usuário não está cadastro do sistema.");
 	
 	private String mensagem;
 	

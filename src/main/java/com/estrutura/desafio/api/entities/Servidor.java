@@ -19,25 +19,25 @@ import javax.persistence.Transient;
 import com.estrutura.desafio.api.enums.TipoServidorEnum;
 
 @Entity
-@Table(name = "tb_servidor")
+@Table(name = "servidores")
 public class Servidor {
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
-	@Column(name = "idt_servidor")
+	@Column(name = "id")
 	private Long id;
 	
-	@Column(name = "nme_servidor", nullable = false)
+	@Column(name = "nome", nullable = false)
 	private String nome;
 	
-	@Column(name = "ip_servidor", nullable = false)
+	@Column(name = "ip", nullable = false)
 	private String ip;
 	
 	@Enumerated(EnumType.STRING)
-	@Column(name = "tipo_servidor", nullable = false)
-	private TipoServidorEnum tipoServidor;
+	@Column(name = "tipo", nullable = false)
+	private TipoServidorEnum tipo;
 
-	@OneToMany(mappedBy = "primeiroServidor", fetch = FetchType.EAGER, cascade = CascadeType.ALL, targetEntity = NoDaRede.class)
+	@OneToMany(mappedBy = "servidor", fetch = FetchType.EAGER, cascade = CascadeType.ALL, targetEntity = NoDaRede.class)
 	private List<NoDaRede> noDaRede;
 	
 	@OneToMany(mappedBy = "servidor", fetch = FetchType.LAZY, cascade = CascadeType.ALL, targetEntity = UsuarioDaRede.class)
@@ -45,17 +45,17 @@ public class Servidor {
 	
 	public Servidor() {}
 	
-	public Servidor(String nome, String ip, TipoServidorEnum tipoServidor) {
+	public Servidor(String nome, String ip, TipoServidorEnum tipo) {
 		this.nome = nome;
 		this.ip = ip;
-		this.tipoServidor = tipoServidor;
+		this.tipo = tipo;
 	}
 
-	public Servidor(Long id, String nome, String ip, TipoServidorEnum tipoServidor) {
+	public Servidor(Long id, String nome, String ip, TipoServidorEnum tipo) {
 		this.id = id;
 		this.nome = nome;
 		this.ip = ip;
-		this.tipoServidor = tipoServidor;
+		this.tipo = tipo;
 	}
 
 	public Long getId() {
@@ -88,11 +88,11 @@ public class Servidor {
 	}
 
 	public TipoServidorEnum getTipoServidor() {
-		return tipoServidor;
+		return tipo;
 	}
 
-	public void setTipoServidor(TipoServidorEnum tipoServidor) {
-		this.tipoServidor = tipoServidor;
+	public void setTipoServidor(TipoServidorEnum tipo) {
+		this.tipo = tipo;
 	}
 
 	public List<NoDaRede> getNoDaRede() {
