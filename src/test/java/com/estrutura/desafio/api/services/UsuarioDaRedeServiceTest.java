@@ -1,10 +1,10 @@
 package com.estrutura.desafio.api.services;
 
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.util.Optional;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -62,24 +62,19 @@ public class UsuarioDaRedeServiceTest {
 	@Test
 	public void testProcurarPorIDDoUsuario() {
 		Page<UsuarioDaRede> usuarioDaRede = this.usuarioDaRedeService.findByUsuarioId(1L, new PageRequest(0, 10));
-		assertTrue(usuarioDaRede.getNumberOfElements() > 0);
+		assertNotNull(usuarioDaRede);
 	}
 	
 	@Test
 	public void testProcurarPorIDDoServidor() {
 		Page<UsuarioDaRede> usuarioDaRede = this.usuarioDaRedeService.findByServidorId(1L, new PageRequest(0, 10));
-		assertTrue(usuarioDaRede.getNumberOfElements() > 0);
+		assertNotNull(usuarioDaRede);
 	}
 	
 	@Test
 	public void testProcurarPorIPDoServidor() {
 		Page<UsuarioDaRede> usuarioDaRede = this.usuarioDaRedeService.findByServidorIp(IP, new PageRequest(0, 10));
 		assertTrue(usuarioDaRede.getNumberOfElements() > 0);
-	}
-	
-	@After
-	public void tearDown() throws Exception {
-		this.usuarioDaRedeService.deleteAll();
 	}
 	
 	private Servidor dadosServidor() {

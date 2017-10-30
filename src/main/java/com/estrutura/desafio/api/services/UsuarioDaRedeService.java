@@ -9,11 +9,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.query.Param;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.estrutura.desafio.api.entities.UsuarioDaRede;
 
-@Transactional(readOnly = true)
 @NamedQueries({
 	@NamedQuery(name = "UsuarioService.findById", query = "SELECT rede FROM UsuarioDaRede rede WHERE rede.usuario.id = :usuarioId"),
 	@NamedQuery(name = "ServidorService.findById", query = "SELECT rede FROM UsuarioDaRede rede WHERE rede.servidor.id = :servidorId"),

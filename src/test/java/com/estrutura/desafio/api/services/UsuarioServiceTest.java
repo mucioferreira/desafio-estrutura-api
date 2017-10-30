@@ -4,7 +4,6 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.Optional;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -41,9 +40,5 @@ public class UsuarioServiceTest {
 		Optional<Usuario> usuario = this.usuarioService.findById(1L);
 		assertTrue(usuario.isPresent());
 	}
-	
-	@After
-	public void tearDown() throws Exception {
-		this.usuarioService.deleteAll();
-	}
+
 }

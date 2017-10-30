@@ -1,11 +1,9 @@
 package com.estrutura.desafio.api.services;
 
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
 
 import java.util.Optional;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -48,7 +46,7 @@ public class NoDaRedeServiceTest {
 	@Test
 	public void testBuscarPorId() throws Exception {
 		Optional<NoDaRede> noDaRede = this.noDaRedeService.findById(1L);
-		assertTrue(noDaRede.isPresent());		
+		assertNotNull(noDaRede);		
 	}
 
 	@Test
@@ -63,11 +61,6 @@ public class NoDaRedeServiceTest {
 		assertNotNull(noDaRede);
 	}
 
-	@After
-	public void tearDown() throws Exception {
-		this.noDaRedeService.deleteAll();
-	}
-	
 	private Servidor dadosServidorUm() {
 		Servidor servidor = new Servidor();
 		servidor.setNome(NOME_SERVIDOR);

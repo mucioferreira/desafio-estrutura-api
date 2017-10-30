@@ -4,7 +4,6 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.Optional;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -31,22 +30,11 @@ public class ServidorServiceTest {
 	public void setUp() throws Exception {
 		this.servidorService.save(this.dadosServidor());
 	}
-
-	@Test
-	public void testProcurarPorIP() {
-		Optional<Servidor> servidor = this.servidorService.findByIp(IP);
-		assertTrue(servidor.isPresent());
-	}
 	
 	@Test
 	public void testProcurarPorID() {
 		Optional<Servidor> servidor = this.servidorService.findById(1L);
 		assertTrue(servidor.isPresent());
-	}
-	
-	@After
-	public void tearDown() throws Exception {
-		this.servidorService.deleteAll();
 	}
 	
 	private Servidor dadosServidor() {

@@ -5,6 +5,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import java.util.Optional;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.BDDMockito;
@@ -46,13 +47,18 @@ public class UsuarioControllerTest {
 	private static final Long SEGUNDO_ID = 2L;
 	private static final String SEGUNDO_NOME = "Usuario 2";
 	
+	@Before
+	public void setUp() throws Exception {
+		BDDMockito.given(this.usuarioService.save(Mockito.any(Usuario.class))).willReturn(this.novoUsuario(ID, NOME));
+		BDDMockito.given(this.usuarioService.findById(Mockito.anyLong())).willReturn(Optional.of(this.novoUsuario(ID, NOME)));
+		BDDMockito.given(this.usuarioService.findByNome(Mockito.anyString())).willReturn(Optional.empty());
+	}
+	
 	@Test
 	public void testNovoUsuarioValido() throws Exception {
-		BDDMockito.given(this.usuarioService.save(Mockito.any(Usuario.class))).willReturn(this.novoUsuario());
-		BDDMockito.given(this.usuarioService.findByNome(Mockito.anyString())).willReturn(Optional.empty());
 		this.mvc.perform(MockMvcRequestBuilders.post(URL)
 			.contentType(MediaType.APPLICATION_JSON)
-			.content(this.usuarioJSON())
+			.content(this.usuarioJSON(ID, NOME))
 			.accept(MediaType.APPLICATION_JSON))
 				.andExpect(status().isOk())
 				.andExpect(jsonPath("$.data.id").value(ID))
@@ -61,11 +67,10 @@ public class UsuarioControllerTest {
 	
 	@Test
 	public void testNovoUsuarioInvalido() throws Exception {
-		BDDMockito.given(this.usuarioService.save(Mockito.any(Usuario.class))).willReturn(this.novoUsuario());
-		BDDMockito.given(this.usuarioService.findByNome(Mockito.anyString())).willReturn(Optional.of(this.novoSegundoUsuario()));
+		BDDMockito.given(this.usuarioService.findByNome(Mockito.anyString())).willReturn(Optional.of(this.novoUsuario(SEGUNDO_ID, SEGUNDO_NOME)));
 		this.mvc.perform(MockMvcRequestBuilders.post(URL)
 			.contentType(MediaType.APPLICATION_JSON)
-			.content(this.usuarioJSON())
+			.content(this.usuarioJSON(ID, NOME))
 			.accept(MediaType.APPLICATION_JSON))
 				.andExpect(status().isBadRequest())
 				.andExpect(jsonPath("$.errors").value(String.valueOf(MensagemEnum.USUARIO_JA_EXISTE)));
@@ -73,7 +78,6 @@ public class UsuarioControllerTest {
 	
 	@Test
 	public void testBuscaUsuarioPeloIdValido() throws Exception {
-		BDDMockito.given(this.usuarioService.findById(Mockito.anyLong())).willReturn(Optional.of(this.novoUsuario()));
 		this.mvc.perform(MockMvcRequestBuilders.get(URL + ID)
 			.accept(MediaType.APPLICATION_JSON))
 				.andExpect(status().isOk())
@@ -91,10 +95,32 @@ public class UsuarioControllerTest {
 	}
 	
 	@Test
+	public void testModificarUsuarioValido() throws Exception {
+		this.mvc.perform(MockMvcRequestBuilders.put(URL)
+			.contentType(MediaType.APPLICATION_JSON)
+			.content(this.usuarioJSON(ID, NOME))
+			.accept(MediaType.APPLICATION_JSON))
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$.data.id").value(ID))
+				.andExpect(jsonPath("$.data.nome").value(NOME));
+	}
+	
+	@Test
+	public void testModificarUsuarioInvalido() throws Exception {
+		BDDMockito.given(this.usuarioService.findByNome(Mockito.anyString())).willReturn(Optional.of(this.novoUsuario(SEGUNDO_ID, SEGUNDO_NOME)));
+		this.mvc.perform(MockMvcRequestBuilders.put(URL)
+			.contentType(MediaType.APPLICATION_JSON)
+			.content(this.usuarioJSON(ID, SEGUNDO_NOME))
+			.accept(MediaType.APPLICATION_JSON))
+				.andExpect(status().isBadRequest())
+				.andExpect(jsonPath("$.errors").value(String.valueOf(MensagemEnum.USUARIO_JA_EXISTE)));
+	}
+	
+	@Test
 	public void testRemoverUsuarioInvalido() throws Exception {
 		BDDMockito.given(this.usuarioService.findById(Mockito.anyLong())).willReturn(Optional.empty());
 		this.mvc.perform(MockMvcRequestBuilders.delete(URL)
-			.content(this.usuarioJSON())
+			.content(this.usuarioJSON(ID, NOME))
 			.contentType(MediaType.APPLICATION_JSON)
 			.accept(MediaType.APPLICATION_JSON))
 				.andExpect(status().isBadRequest())
@@ -103,33 +129,26 @@ public class UsuarioControllerTest {
 	
 	@Test
 	public void testRemoverUsuarioValido() throws Exception {
-		BDDMockito.given(this.usuarioService.findById(Mockito.anyLong())).willReturn(Optional.of(this.novoUsuario()));
 		this.mvc.perform(MockMvcRequestBuilders.delete(URL)
-			.content(this.usuarioJSON())
+			.content(this.usuarioJSON(ID, NOME))
 			.contentType(MediaType.APPLICATION_JSON)
 			.accept(MediaType.APPLICATION_JSON))
 				.andExpect(status().isOk());
 	}
 	
-	private String usuarioJSON() throws JsonProcessingException {
+	private String usuarioJSON(Long id, String nome) throws JsonProcessingException {
 		UsuarioDTO usuarioDto = new UsuarioDTO();
-		usuarioDto.setId(ID);
-		usuarioDto.setNome(NOME);
+		usuarioDto.setId(id);
+		usuarioDto.setNome(nome);
 		ObjectMapper mapper = new ObjectMapper();
 		return mapper.writeValueAsString(usuarioDto);
 	}
 	
-	private Usuario novoUsuario() {
+	private Usuario novoUsuario(Long id, String nome) {
 		Usuario usuario = new Usuario();
-		usuario.setId(ID);
-		usuario.setNome(NOME);
+		usuario.setId(id);
+		usuario.setNome(nome);
 		return usuario;
 	}
-	
-	private Usuario novoSegundoUsuario() {
-		Usuario usuario = new Usuario();
-		usuario.setId(SEGUNDO_ID);
-		usuario.setNome(SEGUNDO_NOME);
-		return usuario;
-	}
+
 }

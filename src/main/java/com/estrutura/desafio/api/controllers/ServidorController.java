@@ -102,15 +102,9 @@ public class ServidorController {
 	
 	@GetMapping(value = "/{id}")
 	public ResponseEntity<Response<ServidorDTO>> procurarServidorPeloId(@PathVariable("id") Long id) throws NoSuchAlgorithmException {
-		return this.verificarBuscaDoServidor(new Response<ServidorDTO>(), this.servidorService.findById(id));
-	}
-	
-	@GetMapping(value = "/ip/{ip}")
-	public ResponseEntity<Response<ServidorDTO>> procurarServidorPeloIp(@PathVariable("ip") String ip) throws NoSuchAlgorithmException {
-		 return this.verificarBuscaDoServidor(new Response<ServidorDTO>(), this.servidorService.findByIp(ip));
-	}
-	
-	private ResponseEntity<Response<ServidorDTO>> verificarBuscaDoServidor(Response<ServidorDTO> response, Optional<Servidor> servidor){
+		Response<ServidorDTO> response = new Response<ServidorDTO>();
+		Optional<Servidor> servidor = this.servidorService.findById(id);
+		
 		if(!servidor.isPresent()) {
 			response.getErrors().add(String.valueOf(MensagemEnum.SERVIDOR_NAO_ENCONTRADO));
 			return ResponseEntity.badRequest().body(response);
@@ -118,7 +112,6 @@ public class ServidorController {
 
 		response.setData(this.converterParaDTO(servidor.get()));
 		return ResponseEntity.ok(response);
-		
 	}
 	
 	private void validarDadosExistentes(ServidorDTO servidorDto, BindingResult result) {
