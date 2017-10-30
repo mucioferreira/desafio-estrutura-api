@@ -18,11 +18,6 @@ public class UsuarioDTO {
 	public UsuarioDTO() {
 		this.id = Optional.empty();
 	}
-
-	public UsuarioDTO(Long id, String nome) {
-		this.id = Optional.of(id);
-		this.nome = nome;
-	}
 	
 	public UsuarioDTO(String nome) {
 		this.nome = nome;
@@ -35,6 +30,11 @@ public class UsuarioDTO {
 	@JsonIgnore
 	public Optional<Long> getIdOpt() {
 		return id;
+	}
+	
+	@JsonIgnore
+	public void setIdOpt(Optional<Long> id) {
+		this.id = id;
 	}
 
 	public void setId(Long id) {

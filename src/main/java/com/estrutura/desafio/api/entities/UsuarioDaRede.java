@@ -34,12 +34,6 @@ public class UsuarioDaRede {
 	private String descricaoDaRede;
 	
 	public UsuarioDaRede() {	}
-	
-	public UsuarioDaRede(Servidor servidor, Usuario usuario, String descricaoDaRede) {
-		this.servidor = servidor;
-		this.usuario = usuario;
-		this.descricaoDaRede = descricaoDaRede;
-	}
 
 	public Long getId() {
 		return id;

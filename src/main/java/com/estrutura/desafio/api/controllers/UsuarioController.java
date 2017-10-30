@@ -53,11 +53,9 @@ public class UsuarioController {
 	@PutMapping
 	public ResponseEntity<Response<UsuarioDTO>> modificarUsuario(@Valid @RequestBody UsuarioDTO usuarioDto, BindingResult result) throws NoSuchAlgorithmException {
 		Response<UsuarioDTO> response = new Response<UsuarioDTO>();
-		Optional<Usuario> usuario = Optional.empty();
+		Optional<Usuario> usuario = usuarioDto.getIdOpt().isPresent() ? this.usuarioService.findById(usuarioDto.getId()) : Optional.empty();
 		
 		if(!usuarioDto.getIdOpt().isPresent()) result.addError(new ObjectError("usuario", String.valueOf(MensagemEnum.NENHUM_ID_DO_USUARIO)));
-		else usuario = this.usuarioService.findById(usuarioDto.getId());
-		
 		if(usuario.isPresent()) {
 			if(!usuario.get().getNome().equals(usuarioDto.getNome())) this.validarDadosExistentes(usuarioDto, result);
 		} else result.addError(new ObjectError("usuario", String.valueOf(MensagemEnum.USUARIO_NAO_ENCONTRADO)));
@@ -73,7 +71,7 @@ public class UsuarioController {
 	public ResponseEntity<Response<UsuarioDTO>> deletarUsuario(@RequestBody UsuarioDTO usuarioDto) throws NoSuchAlgorithmException {
 		Response<UsuarioDTO> response = new Response<UsuarioDTO>();
 		
-		if(!this.buscarUsuario(usuarioDto.getId()).isPresent()) {
+		if(!this.usuarioService.findById(usuarioDto.getId()).isPresent()) {
 			response.getErrors().add(String.valueOf(MensagemEnum.USUARIO_NAO_ENCONTRADO));
 			return ResponseEntity.badRequest().body(response);
 		}
@@ -105,7 +103,7 @@ public class UsuarioController {
 	@GetMapping(value = "/{id}")
 	public ResponseEntity<Response<UsuarioDTO>> procurarUsuarioPeloId(@PathVariable("id") Long id) throws NoSuchAlgorithmException {
 		Response<UsuarioDTO> response = new Response<UsuarioDTO>();
-		Optional<Usuario> usuario = this.buscarUsuario(id);
+		Optional<Usuario> usuario = this.usuarioService.findById(id);
 		
 		if(!usuario.isPresent()) {
 			response.getErrors().add(String.valueOf(MensagemEnum.USUARIO_NAO_ENCONTRADO));
@@ -116,18 +114,18 @@ public class UsuarioController {
 		return ResponseEntity.ok(response);
 	}
 	
-	private Optional<Usuario> buscarUsuario(Long id) {
-		return (id != null) ? this.usuarioService.findById(id) : Optional.empty();
-	}
-	
 	private Usuario converterParaUsuario(UsuarioDTO usuarioDto) {
-		Usuario usuario = new Usuario(usuarioDto.getNome());
+		Usuario usuario = new Usuario();
 		usuarioDto.getIdOpt().ifPresent(id -> usuario.setId(id));
+		usuario.setNome(usuarioDto.getNome());
 		return usuario;
 	}
 	
 	private UsuarioDTO converterParaDTO(Usuario usuario) {
-		return new UsuarioDTO(usuario.getId(), usuario.getNome());
+		 UsuarioDTO usuarioDTO = new UsuarioDTO();
+		 usuarioDTO.setId(usuario.getId());
+		 usuarioDTO.setNome(usuario.getNome());
+		return usuarioDTO;
 	}
 	
 	private void validarDadosExistentes(UsuarioDTO usuarioDto, BindingResult result) {

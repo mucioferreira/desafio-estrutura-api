@@ -65,17 +65,14 @@ public class UsuarioDaRedeController {
 	public ResponseEntity<Response<UsuarioDaRedeDTO>> modificarUsuarioDaRede(@Valid @RequestBody UsuarioDaRedeDTO usuarioDaRedeDto, BindingResult result) throws NoSuchAlgorithmException {
 		Response<UsuarioDaRedeDTO> response = new Response<UsuarioDaRedeDTO>();
 		
-		Optional<UsuarioDaRede> usuarioDaRede = Optional.empty();
+		Optional<UsuarioDaRede> usuarioDaRede = usuarioDaRedeDto.getIdOpt().isPresent() ? this.usuarioDaRedeService.findById(usuarioDaRedeDto.getId()) : Optional.empty();
 		Optional<Servidor> servidor = this.servidorService.findById(usuarioDaRedeDto.getServidor());
 		Optional<Usuario> usuario = this.usuarioService.findById(usuarioDaRedeDto.getUsuario());
 
 		if(!usuarioDaRedeDto.getIdOpt().isPresent()) result.addError(new ObjectError("usuarioDaRede", String.valueOf(MensagemEnum.NENHUM_ID_DO_USUARIO_DA_REDE)));
-		else usuarioDaRede = this.usuarioDaRedeService.findById(usuarioDaRedeDto.getId());
-		if(usuarioDaRede.isPresent() ) {
-			this.validarDadosExistentes(servidor, usuario, result);
-		} else result.addError(new ObjectError("usuarioDaRede", String.valueOf(MensagemEnum.USUARIO_DA_REDE_NAO_ENCONTRADO)));
+		else if(!usuarioDaRede.isPresent()) result.addError(new ObjectError("usuarioDaRede", String.valueOf(MensagemEnum.USUARIO_DA_REDE_NAO_ENCONTRADO)));
+		this.validarDadosExistentes(servidor, usuario, result);
 		if(result.hasErrors()) return response.getResponseWithErrors(response, result);
-			
 			
 		UsuarioDaRede u = this.usuarioDaRedeService.save(this.converterParaUsuarioDaRede(usuarioDaRedeDto, servidor.get(), usuario.get()));
 		response.setData(this.converterParaDTO(u));

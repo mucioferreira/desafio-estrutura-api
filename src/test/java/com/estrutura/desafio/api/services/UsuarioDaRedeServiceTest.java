@@ -37,12 +37,10 @@ public class UsuarioDaRedeServiceTest {
 	// Servidor
 	private static final String NOME_SERVIDOR = "mysql-desenv";
 	private static final String IP = "172.16.0.107";
-	private static final Servidor SERVIDOR = new Servidor(NOME_SERVIDOR, IP, TipoServidorEnum.SERVIDOR_DE_APLICACAO);
 	
 	
 	// Usuario
 	private static final String NOME_USUARIO = "Desenvolvedor PHP";
-	private static final Usuario USUARIO = new Usuario(NOME_USUARIO);
 	
 	
 	// Rede
@@ -50,9 +48,9 @@ public class UsuarioDaRedeServiceTest {
 	
 	@Before
 	public void setUp() throws Exception {
-		Servidor servidor = this.servidorService.save(SERVIDOR);
-		Usuario usuario = this.usuarioService.save(USUARIO);
-		this.usuarioDaRedeService.save(new UsuarioDaRede(servidor, usuario, DESCRICAO_DA_REDE));
+		Servidor servidor = this.servidorService.save(this.dadosServidor());
+		Usuario usuario = this.usuarioService.save(this.dadosUsuario());
+		this.usuarioDaRedeService.save(this.dadosUsuarioDaRede(servidor, usuario));
 	}
 	
 	@Test
@@ -82,6 +80,28 @@ public class UsuarioDaRedeServiceTest {
 	@After
 	public void tearDown() throws Exception {
 		this.usuarioDaRedeService.deleteAll();
+	}
+	
+	private Servidor dadosServidor() {
+		Servidor servidor = new Servidor();
+		servidor.setNome(NOME_SERVIDOR);
+		servidor.setIp(IP);
+		servidor.setTipoServidor(TipoServidorEnum.SERVIDOR_DE_APLICACAO);
+		return servidor;
+	}
+	
+	private Usuario dadosUsuario() {
+		Usuario usuario = new Usuario();
+		usuario.setNome(NOME_USUARIO);
+		return usuario;
+	}
+	
+	private UsuarioDaRede dadosUsuarioDaRede(Servidor servidor, Usuario usuario) {
+		UsuarioDaRede usuarioDaRede = new UsuarioDaRede();
+		usuarioDaRede.setServidor(servidor);
+		usuarioDaRede.setUsuario(usuario);
+		usuarioDaRede.setDescricaoDaRede(DESCRICAO_DA_REDE);
+		return usuarioDaRede;
 	}
 
 }

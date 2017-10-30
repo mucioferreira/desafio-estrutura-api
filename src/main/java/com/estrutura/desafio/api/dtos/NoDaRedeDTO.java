@@ -26,34 +26,7 @@ public class NoDaRedeDTO {
 	
 	public NoDaRedeDTO() {
 		this.id = Optional.empty();
-	}
-	
-	public NoDaRedeDTO(Long id, Long servidor, Long proximoNo, String descricaoDaRede, AmbienteDaRedeEnum ambienteDaRede) {
-		this.id = Optional.of(id);
-		this.servidor = servidor;
-		this.proximoNo = proximoNo;
-		this.descricaoDaRede = descricaoDaRede;
-		this.ambienteDaRede = ambienteDaRede;
-	}
-
-	public NoDaRedeDTO(Long servidor, Long proximoNo, String descricaoDaRede, AmbienteDaRedeEnum ambienteDaRede) {
-		this.servidor = servidor;
-		this.proximoNo = proximoNo;
-		this.descricaoDaRede = descricaoDaRede;
-		this.ambienteDaRede = ambienteDaRede;
-	}
-
-	public NoDaRedeDTO(Long servidor, String descricaoDaRede, AmbienteDaRedeEnum ambienteDaRede) {
-		this.servidor = servidor;
-		this.descricaoDaRede = descricaoDaRede;
-		this.ambienteDaRede = ambienteDaRede;
-	}
-	
-	public NoDaRedeDTO(Long id, String descricaoDaRede, Long servidor, AmbienteDaRedeEnum ambienteDaRede) {
-		this.id = Optional.of(id);
-		this.servidor = servidor;
-		this.descricaoDaRede = descricaoDaRede;
-		this.ambienteDaRede = ambienteDaRede;
+		this.descricaoDaRede = new String();
 	}
 
 	public Long getId() {
@@ -65,8 +38,8 @@ public class NoDaRedeDTO {
 		return id;
 	}
 	
-	public void setId(Optional<Long> id) {
-		this.id = id;
+	public void setId(Long id) {
+		this.id = Optional.of(id);
 	}
 	
 	public Long getServidor() {
@@ -81,12 +54,23 @@ public class NoDaRedeDTO {
 		return proximoNo;
 	}
 	
+	@JsonIgnore
+	public Optional<Long> getProximoNoOpt() {
+		return Optional.of(proximoNo);
+	}
+	
+	
 	public void setProximoNo(Long proximoNo) {
 		this.proximoNo = proximoNo;
 	}
 	
 	public String getDescricaoDaRede() {
 		return descricaoDaRede;
+	}
+	
+	@JsonIgnore
+	public Optional<String> getDescricaoDaRedeOpt() {
+		return Optional.of(descricaoDaRede);
 	}
 	
 	public void setDescricaoDaRede(String descricaoDaRede) {

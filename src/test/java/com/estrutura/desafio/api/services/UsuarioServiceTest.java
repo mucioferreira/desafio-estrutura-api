@@ -27,9 +27,15 @@ public class UsuarioServiceTest {
 	
 	@Before
 	public void setUp() throws Exception {
-		this.usuarioService.save(new Usuario(NOME));
+		this.usuarioService.save(this.dadosUsuario());
 	}
 	
+	private Usuario dadosUsuario() {
+		Usuario usuario = new Usuario();
+		usuario.setNome(NOME);
+		return usuario;
+	}
+
 	@Test
 	public void testProcurarPorID() {
 		Optional<Usuario> usuario = this.usuarioService.findById(1L);

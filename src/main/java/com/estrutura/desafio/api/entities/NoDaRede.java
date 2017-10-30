@@ -1,5 +1,7 @@
 package com.estrutura.desafio.api.entities;
 
+import java.util.Optional;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -9,6 +11,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import com.estrutura.desafio.api.enums.AmbienteDaRedeEnum;
 
@@ -37,36 +40,13 @@ public class NoDaRede {
 	
 	public NoDaRede() {	}
 
-	public NoDaRede(Servidor servidor, NoDaRede proximoNo, String descricaoDaRede, AmbienteDaRedeEnum ambienteDaRede) {
-		this.servidor = servidor;
-		this.proximoNo = proximoNo;
-		this.descricaoDaRede = descricaoDaRede;
-		this.ambienteDaRede = ambienteDaRede;
-	}
-	
-	public NoDaRede(Servidor servidor, String descricaoDaRede, AmbienteDaRedeEnum ambienteDaRede) {
-		this.servidor = servidor;
-		this.descricaoDaRede = descricaoDaRede;
-		this.ambienteDaRede = ambienteDaRede;
-	}
-	
-	public NoDaRede(Long id, Servidor servidor, String descricaoDaRede, AmbienteDaRedeEnum ambienteDaRede) {
-		this.id = id;
-		this.servidor = servidor;
-		this.descricaoDaRede = descricaoDaRede;
-		this.ambienteDaRede = ambienteDaRede;
-	}
-
-	public NoDaRede(Long id, Servidor servidor, NoDaRede proximoNo, String descricaoDaRede, AmbienteDaRedeEnum ambienteDaRede) {
-		this.id = id;
-		this.servidor = servidor;
-		this.proximoNo = proximoNo;
-		this.descricaoDaRede = descricaoDaRede;
-		this.ambienteDaRede = ambienteDaRede;
-	}
-
 	public Long getId() {
 		return id;
+	}
+	
+	@Transient
+	public Optional<Long> getIdOpt() {
+		return Optional.of(id);
 	}
 
 	public void setId(Long id) {
@@ -84,6 +64,11 @@ public class NoDaRede {
 	public NoDaRede getProximoNo() {
 		return proximoNo;
 	}
+	
+	@Transient
+	public Optional<NoDaRede> getProximoNoOpt() {
+		return Optional.of(proximoNo);
+	}
 
 	public void setProximoNo(NoDaRede proximoNo) {
 		this.proximoNo = proximoNo;
@@ -95,6 +80,11 @@ public class NoDaRede {
 
 	public void setDescricaoDaRede(String descricaoDaRede) {
 		this.descricaoDaRede = descricaoDaRede;
+	}
+	
+    @Transient
+	public Optional<String> getDescricaoDaRedeOpt() {
+		return Optional.of(descricaoDaRede);
 	}
 
 	public AmbienteDaRedeEnum getAmbienteDaRede() {

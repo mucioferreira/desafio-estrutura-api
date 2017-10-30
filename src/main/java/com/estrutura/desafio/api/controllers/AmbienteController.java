@@ -20,11 +20,8 @@ public class AmbienteController {
 	@GetMapping
 	public ResponseEntity<Response<Map<String, AmbienteDaRedeEnum>>> listarAmbientes() throws NoSuchAlgorithmException {
 		Response<Map<String, AmbienteDaRedeEnum>> response = new Response<Map<String, AmbienteDaRedeEnum>>();
-		
 		response.setData(AmbienteDaRedeEnum.getNomesAmbienteDaRede());
 		return ResponseEntity.ok(response);
 	}
 
-	
-	
 }

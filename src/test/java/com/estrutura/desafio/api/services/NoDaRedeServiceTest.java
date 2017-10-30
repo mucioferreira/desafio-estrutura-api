@@ -37,15 +37,12 @@ public class NoDaRedeServiceTest {
 	private static final String IP_SERVIDOR_2 = "987654321";
 	private static final String DESCRICAO_REDE = "Teste descricao";
 	
-	private static final Servidor SERVIDOR = new Servidor(NOME_SERVIDOR, IP_SERVIDOR, TipoServidorEnum.PROXY);
-	private static final Servidor SERVIDOR_2 = new Servidor(NOME_SERVIDOR, IP_SERVIDOR_2, TipoServidorEnum.PROXY);
-	
 	@Before
 	public void setUp() throws Exception {
-		this.servidorService.save(SERVIDOR);
-		this.servidorService.save(SERVIDOR_2);
-		this.noDaRedeService.save(new NoDaRede(this.servidorService.findOne(1L), DESCRICAO_REDE, AmbienteDaRedeEnum.DESENVOLVIMENTO));
-		this.noDaRedeService.save(new NoDaRede(this.servidorService.findOne(1L), this.noDaRedeService.findOne(1L), DESCRICAO_REDE, AmbienteDaRedeEnum.DESENVOLVIMENTO));
+		this.servidorService.save(this.dadosServidorUm());
+		this.servidorService.save(this.dadosServidorDois());
+		this.noDaRedeService.save(this.dadosNoDaRedeUm());
+		this.noDaRedeService.save(this.dadosNoDaRedeDois());
 	}
 	
 	@Test
@@ -69,5 +66,38 @@ public class NoDaRedeServiceTest {
 	@After
 	public void tearDown() throws Exception {
 		this.noDaRedeService.deleteAll();
+	}
+	
+	private Servidor dadosServidorUm() {
+		Servidor servidor = new Servidor();
+		servidor.setNome(NOME_SERVIDOR);
+		servidor.setIp(IP_SERVIDOR);
+		servidor.setTipoServidor(TipoServidorEnum.PROXY);
+		return servidor;
+	}
+	
+	private Servidor dadosServidorDois() {
+		Servidor servidor = new Servidor();
+		servidor.setNome(NOME_SERVIDOR);
+		servidor.setIp(IP_SERVIDOR_2);
+		servidor.setTipoServidor(TipoServidorEnum.PROXY);
+		return servidor;
+	}
+	
+	private NoDaRede dadosNoDaRedeUm() {
+		NoDaRede noDaRede = new NoDaRede();
+		noDaRede.setServidor(this.servidorService.findOne(1L));
+		noDaRede.setDescricaoDaRede(DESCRICAO_REDE);
+		noDaRede.setAmbienteDaRede(AmbienteDaRedeEnum.DESENVOLVIMENTO);
+		return noDaRede;
+	}
+	
+	private NoDaRede dadosNoDaRedeDois() {
+		NoDaRede noDaRede = new NoDaRede();
+		noDaRede.setServidor(this.servidorService.findOne(1L));
+		noDaRede.setProximoNo(this.noDaRedeService.findOne(1L));
+		noDaRede.setDescricaoDaRede(DESCRICAO_REDE);
+		noDaRede.setAmbienteDaRede(AmbienteDaRedeEnum.DESENVOLVIMENTO);
+		return noDaRede;
 	}
 }

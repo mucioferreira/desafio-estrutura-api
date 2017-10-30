@@ -28,13 +28,6 @@ public class ServidorDTO {
 	public ServidorDTO() {
 		this.id = Optional.empty();
 	}
-	
-	public ServidorDTO(Long id, String nome, String ip, TipoServidorEnum tipoServidor) {
-		this.id = Optional.of(id);
-		this.nome = nome;
-		this.ip = ip;
-		this.tipoServidor = tipoServidor;
-	}
 
 	public Long getId() {
 		return id.get();

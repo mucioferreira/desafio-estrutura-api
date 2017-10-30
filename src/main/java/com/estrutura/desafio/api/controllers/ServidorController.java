@@ -46,7 +46,6 @@ public class ServidorController {
 		if(result.hasErrors()) return response.getResponseWithErrors(response, result);
 	
 		Servidor servidor = this.servidorService.save(this.converterParaServidor(servidorDto));
-		
 		response.setData(this.converterParaDTO(servidor));
 		return ResponseEntity.ok(response);
 	}
@@ -54,10 +53,9 @@ public class ServidorController {
 	@PutMapping
 	public ResponseEntity<Response<ServidorDTO>> modificarServidor(@Valid @RequestBody ServidorDTO servidorDto, BindingResult result) throws NoSuchAlgorithmException {
 		Response<ServidorDTO> response = new Response<ServidorDTO>();
-		Optional<Servidor> servidor = Optional.empty();
+		Optional<Servidor> servidor = servidorDto.getIdOpt().isPresent() ? this.servidorService.findById(servidorDto.getId()) : Optional.empty();
 		
 		if(!servidorDto.getIdOpt().isPresent()) result.addError(new ObjectError("servidor", String.valueOf(MensagemEnum.NENHUM_ID_DO_SERVIDOR)));
-		else servidor = this.servidorService.findById(servidorDto.getId());
 		if(servidor.isPresent()) {
 			if(!servidor.get().getIp().equals(servidorDto.getIp())) this.validarDadosExistentes(servidorDto, result);
 		} else result.addError(new ObjectError("servidor", String.valueOf(MensagemEnum.SERVIDOR_NAO_ENCONTRADO)));
@@ -65,7 +63,6 @@ public class ServidorController {
 		if(result.hasErrors()) return response.getResponseWithErrors(response, result);
 
 		Servidor s = this.servidorService.save(this.modificarServidor(servidor.get(), servidorDto));
-
 		response.setData(this.converterParaDTO(s));
 		return ResponseEntity.ok(response);
 	}
@@ -130,13 +127,21 @@ public class ServidorController {
 	}
 	
 	private Servidor converterParaServidor(ServidorDTO servidorDto) {
-		Servidor servidor = new Servidor(servidorDto.getNome(), servidorDto.getIp(), servidorDto.getTipoServidor());
+		Servidor servidor = new Servidor();
 		servidorDto.getIdOpt().ifPresent(id -> servidor.setId(id));
+		servidor.setNome(servidorDto.getNome());
+		servidor.setIp(servidorDto.getIp());
+		servidor.setTipoServidor(servidorDto.getTipoServidor());
 		return servidor;
 	}
 	
 	private ServidorDTO converterParaDTO(Servidor servidor) {
-		return new ServidorDTO(servidor.getId(), servidor.getNome(), servidor.getIp(), servidor.getTipoServidor());
+		ServidorDTO servidorDto = new ServidorDTO();
+		servidorDto.setId(servidor.getId());
+		servidorDto.setNome(servidor.getNome());
+		servidorDto.setIp(servidor.getIp());
+		servidorDto.setTipoServidor(servidor.getTipoServidor());
+		return servidorDto;
 	}
 	
 	private Servidor modificarServidor(Servidor servidor, ServidorDTO servidorDto) {

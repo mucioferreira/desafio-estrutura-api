@@ -29,9 +29,9 @@ public class ServidorServiceTest {
 	
 	@Before
 	public void setUp() throws Exception {
-		this.servidorService.save(new Servidor(NOME, IP, TipoServidorEnum.SERVIDOR_DE_BANCO));
+		this.servidorService.save(this.dadosServidor());
 	}
-	
+
 	@Test
 	public void testProcurarPorIP() {
 		Optional<Servidor> servidor = this.servidorService.findByIp(IP);
@@ -47,5 +47,13 @@ public class ServidorServiceTest {
 	@After
 	public void tearDown() throws Exception {
 		this.servidorService.deleteAll();
+	}
+	
+	private Servidor dadosServidor() {
+		Servidor servidor = new Servidor();
+		servidor.setNome(NOME);
+		servidor.setIp(IP);
+		servidor.setTipoServidor(TipoServidorEnum.SERVIDOR_DE_BANCO);
+		return servidor;
 	}
 }

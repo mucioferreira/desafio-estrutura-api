@@ -40,19 +40,6 @@ public class Servidor {
 //	private List<UsuarioDaRede> usuarioDaRede;
 	
 	public Servidor() {}
-	
-	public Servidor(String nome, String ip, TipoServidorEnum tipo) {
-		this.nome = nome;
-		this.ip = ip;
-		this.tipo = tipo;
-	}
-
-	public Servidor(Long id, String nome, String ip, TipoServidorEnum tipo) {
-		this.id = id;
-		this.nome = nome;
-		this.ip = ip;
-		this.tipo = tipo;
-	}
 
 	public Long getId() {
 		return id;
