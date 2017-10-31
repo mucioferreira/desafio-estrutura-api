@@ -28,6 +28,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.estrutura.desafio.api.dtos.ServidorDTO;
 import com.estrutura.desafio.api.entities.Servidor;
 import com.estrutura.desafio.api.enums.MensagemEnum;
+import com.estrutura.desafio.api.interfaces.Converter;
 import com.estrutura.desafio.api.response.Response;
 import com.estrutura.desafio.api.services.ServidorService;
 
@@ -40,6 +41,9 @@ public class ServidorController {
 	@Autowired
 	private ServidorService servidorService;
 	
+	@Autowired
+	private Converter converter;
+	
 	@PostMapping
 	public ResponseEntity<Response<ServidorDTO>> cadastrarServidor(@Valid @RequestBody ServidorDTO servidorDto, BindingResult result) throws NoSuchAlgorithmException {
 		Response<ServidorDTO> response = new Response<ServidorDTO>();
@@ -47,8 +51,8 @@ public class ServidorController {
 		this.validarDadosExistentes(servidorDto, result);
 		if(result.hasErrors()) return response.getResponseWithErrors(response, result);
 	
-		Servidor servidor = this.servidorService.save(this.converterParaServidor(servidorDto));
-		response.setData(this.converterParaDTO(servidor));
+		Servidor servidor = this.servidorService.save(this.converter.converterParaEntidade(servidorDto));
+		response.setData(this.converter.converterParaDTO(servidor));
 		return ResponseEntity.ok(response);
 	}
 
@@ -65,7 +69,7 @@ public class ServidorController {
 		if(result.hasErrors()) return response.getResponseWithErrors(response, result);
 
 		Servidor s = this.servidorService.save(this.modificarServidor(servidor.get(), servidorDto));
-		response.setData(this.converterParaDTO(s));
+		response.setData(this.converter.converterParaDTO(s));
 		return ResponseEntity.ok(response);
 	}
 	
@@ -79,7 +83,7 @@ public class ServidorController {
 		}
 		
 		try {
-			this.servidorService.delete(this.converterParaServidor(servidorDto));
+			this.servidorService.delete(this.converter.converterParaEntidade(servidorDto));
 		} catch (Exception e) {
 			response.getErrors().add(String.valueOf(MensagemEnum.SERVIDOR_NAO_PODE_SER_EXCLUIDO));
 			return ResponseEntity.badRequest().body(response);
@@ -97,7 +101,7 @@ public class ServidorController {
 	) {
 		Response<Page<ServidorDTO>> response = new Response<Page<ServidorDTO>>();
 		PageRequest pageRequest = new PageRequest(pagina, qtdPagina, Direction.valueOf(direcao), ordem);
-		Page<ServidorDTO> servidoresDto = this.servidorService.findAll(pageRequest).map(servidor -> this.converterParaDTO(servidor));
+		Page<ServidorDTO> servidoresDto = this.servidorService.findAll(pageRequest).map(servidor -> this.converter.converterParaDTO(servidor));
 		response.setData(servidoresDto);
 		return ResponseEntity.ok(response);
 	}
@@ -112,7 +116,7 @@ public class ServidorController {
 			return ResponseEntity.badRequest().body(response);
 		}
 
-		response.setData(this.converterParaDTO(servidor.get()));
+		response.setData(this.converter.converterParaDTO(servidor.get()));
 		return ResponseEntity.ok(response);
 	}
 	
@@ -120,7 +124,7 @@ public class ServidorController {
 	public ResponseEntity<Response<List<ServidorDTO>>> buscarServidoresPeloIp(@RequestParam("ip") String ip) throws NoSuchAlgorithmException {
 		Response<List<ServidorDTO>> response = new Response<List<ServidorDTO>>();
 		List<ServidorDTO> servidoresDto = new ArrayList<ServidorDTO>();
-		this.servidorService.findByLikeIp(ip).forEach(servidor -> servidoresDto.add(this.converterParaDTO(servidor)));
+		if(ip != "") this.servidorService.findByLikeIp(ip).forEach(servidor -> servidoresDto.add(this.converter.converterParaDTO(servidor)));
 		response.setData(servidoresDto);
 		return ResponseEntity.ok(response);
 	}
@@ -129,25 +133,7 @@ public class ServidorController {
 		this.servidorService.findByIp(servidorDto.getIp())
 			.ifPresent(erro -> result.addError(new ObjectError("servidor", String.valueOf(MensagemEnum.SERVIDOR_JA_EXISTE))));
 	}
-	
-	private Servidor converterParaServidor(ServidorDTO servidorDto) {
-		Servidor servidor = new Servidor();
-		servidorDto.getIdOpt().ifPresent(id -> servidor.setId(id));
-		servidor.setNome(servidorDto.getNome());
-		servidor.setIp(servidorDto.getIp());
-		servidor.setTipoServidor(servidorDto.getTipoServidor());
-		return servidor;
-	}
-	
-	private ServidorDTO converterParaDTO(Servidor servidor) {
-		ServidorDTO servidorDto = new ServidorDTO();
-		servidorDto.setId(servidor.getId());
-		servidorDto.setNome(servidor.getNome());
-		servidorDto.setIp(servidor.getIp());
-		servidorDto.setTipoServidor(servidor.getTipoServidor());
-		return servidorDto;
-	}
-	
+		
 	private Servidor modificarServidor(Servidor servidor, ServidorDTO servidorDto) {
 		servidor.setId(servidorDto.getId());
 		servidor.setNome(servidorDto.getNome());

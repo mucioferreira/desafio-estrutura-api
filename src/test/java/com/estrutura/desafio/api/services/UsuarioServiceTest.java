@@ -1,7 +1,9 @@
 package com.estrutura.desafio.api.services;
 
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.junit.Before;
@@ -39,6 +41,12 @@ public class UsuarioServiceTest {
 	public void testProcurarPorID() {
 		Optional<Usuario> usuario = this.usuarioService.findById(1L);
 		assertTrue(usuario.isPresent());
+	}
+	
+	@Test
+	public void testProcurarPorNome() {
+		List<Usuario> usuario = this.usuarioService.findByLikeNome(NOME);
+		assertNotNull(usuario);
 	}
 
 }

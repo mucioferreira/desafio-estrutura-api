@@ -13,17 +13,17 @@ public class UsuarioDaRedeDTO {
 	private Optional<Long> id;
 	
 	@NotNull(message = "Servidor não pode ser vazio.")
-	private Long servidor;
+	private ServidorDTO servidor;
 	
 	@NotNull(message = "Usuário não pode ser vazio.")
-	private Long usuario;
+	private UsuarioDTO usuario;
 	
 	@Length(max = 255, message = "Descrição deve conter até 255 caracteres.")
-	private String descricaoDaRede;
+	private String descricao;
 	
 	public UsuarioDaRedeDTO() {
 		this.id = Optional.empty();
-		this.descricaoDaRede = new String();
+		this.descricao = new String();
 	}
 	
 	public Long getId() {
@@ -39,33 +39,33 @@ public class UsuarioDaRedeDTO {
 		this.id = Optional.of(id);
 	}
 
-	public Long getServidor() {
+	public ServidorDTO getServidor() {
 		return servidor;
 	}
 
-	public void setServidor(Long servidor) {
+	public void setServidor(ServidorDTO servidor) {
 		this.servidor = servidor;
 	}
 
-	public Long getUsuario() {
+	public UsuarioDTO getUsuario() {
 		return usuario;
 	}
 
-	public void setUsuario(Long usuario) {
+	public void setUsuario(UsuarioDTO usuario) {
 		this.usuario = usuario;
 	}
 
-	public String getDescricaoDaRede() {
-		return descricaoDaRede;
+	public String getDescricao() {
+		return descricao;
 	}
 	
 	@JsonIgnore
-	public Optional<String> getDescricaoDaRedeOpt() {
-		return Optional.of(descricaoDaRede);
+	public Optional<String> getDescricaoOpt() {
+		return Optional.of(descricao);
 	}
 
-	public void setDescricaoDaRede(String descricaoDaRede) {
-		this.descricaoDaRede = descricaoDaRede;
+	public void setDescricao(String descricao) {
+		this.descricao = descricao;
 	}
 	
 }

@@ -1,6 +1,8 @@
 package com.estrutura.desafio.api.controllers;
 
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import javax.validation.Valid;
@@ -26,8 +28,10 @@ import org.springframework.web.bind.annotation.RestController;
 import com.estrutura.desafio.api.dtos.UsuarioDTO;
 import com.estrutura.desafio.api.entities.Usuario;
 import com.estrutura.desafio.api.enums.MensagemEnum;
+import com.estrutura.desafio.api.interfaces.Converter;
 import com.estrutura.desafio.api.response.Response;
 import com.estrutura.desafio.api.services.UsuarioService;
+
 
 @RestController
 @RequestMapping("/api/usuario")
@@ -37,6 +41,9 @@ public class UsuarioController {
 	@Autowired
 	private UsuarioService usuarioService;
 
+	@Autowired
+	private Converter converter;
+	
 	@PostMapping
 	public ResponseEntity<Response<UsuarioDTO>> cadastrarUsuario(@Valid @RequestBody UsuarioDTO usuarioDto, BindingResult result) throws NoSuchAlgorithmException {
 		Response<UsuarioDTO> response = new Response<UsuarioDTO>();
@@ -44,9 +51,9 @@ public class UsuarioController {
 		this.validarDadosExistentes(usuarioDto, result);
 		if(result.hasErrors()) return response.getResponseWithErrors(response, result);
 		
-		Usuario usuario = this.usuarioService.save(this.converterParaUsuario(usuarioDto));
+		Usuario usuario = this.usuarioService.save(this.converter.converterParaEntidade(usuarioDto));
 		
-		response.setData(this.converterParaDTO(usuario));
+		response.setData(this.converter.converterParaDTO(usuario));
 		return ResponseEntity.ok(response);
 	}
 	
@@ -61,9 +68,9 @@ public class UsuarioController {
 		} else result.addError(new ObjectError("usuario", String.valueOf(MensagemEnum.USUARIO_NAO_ENCONTRADO)));
 		if(result.hasErrors()) return response.getResponseWithErrors(response, result);
 		
-		Usuario u = this.usuarioService.save(this.converterParaUsuario(usuarioDto));
+		Usuario u = this.usuarioService.save(this.converter.converterParaEntidade(usuarioDto));
 		
-		response.setData(this.converterParaDTO(u));
+		response.setData(this.converter.converterParaDTO(u));
 		return ResponseEntity.ok(response);
 	}
 	
@@ -77,7 +84,7 @@ public class UsuarioController {
 		}
 			
 		try {
-			this.usuarioService.delete(this.converterParaUsuario(usuarioDto));
+			this.usuarioService.delete(this.converter.converterParaEntidade(usuarioDto));
 		} catch (Exception e) {
 			response.getErrors().add(String.valueOf(MensagemEnum.USUARIO_NAO_PODE_SER_EXCLUIDO));
 			return ResponseEntity.badRequest().body(response);
@@ -95,7 +102,7 @@ public class UsuarioController {
 	) {
 		Response<Page<UsuarioDTO>> response = new Response<Page<UsuarioDTO>>();
 		PageRequest pageRequest = new PageRequest(pagina, qtdPagina, Direction.valueOf(direcao), ordem);
-		Page<UsuarioDTO> usuariosDto = this.usuarioService.findAll(pageRequest).map(usuario -> this.converterParaDTO(usuario));
+		Page<UsuarioDTO> usuariosDto = this.usuarioService.findAll(pageRequest).map(usuario -> this.converter.converterParaDTO(usuario));
 		response.setData(usuariosDto);
 		return ResponseEntity.ok(response);
 	}
@@ -110,22 +117,17 @@ public class UsuarioController {
 			return ResponseEntity.badRequest().body(response);
 		}
 			
-		response.setData(this.converterParaDTO(usuario.get()));
+		response.setData(this.converter.converterParaDTO(usuario.get()));
 		return ResponseEntity.ok(response);
 	}
 	
-	private Usuario converterParaUsuario(UsuarioDTO usuarioDto) {
-		Usuario usuario = new Usuario();
-		usuarioDto.getIdOpt().ifPresent(id -> usuario.setId(id));
-		usuario.setNome(usuarioDto.getNome());
-		return usuario;
-	}
-	
-	private UsuarioDTO converterParaDTO(Usuario usuario) {
-		 UsuarioDTO usuarioDTO = new UsuarioDTO();
-		 usuarioDTO.setId(usuario.getId());
-		 usuarioDTO.setNome(usuario.getNome());
-		return usuarioDTO;
+	@GetMapping(params = "nome")
+	public ResponseEntity<Response<List<UsuarioDTO>>> buscarServidoresPeloIp(@RequestParam("nome") String nome) throws NoSuchAlgorithmException {
+		Response<List<UsuarioDTO>> response = new Response<List<UsuarioDTO>>();
+		List<UsuarioDTO> usuariosDto = new ArrayList<UsuarioDTO>();
+		if(nome != "") this.usuarioService.findByLikeNome(nome).forEach(usuario -> usuariosDto.add(this.converter.converterParaDTO(usuario)));
+		response.setData(usuariosDto);
+		return ResponseEntity.ok(response);
 	}
 	
 	private void validarDadosExistentes(UsuarioDTO usuarioDto, BindingResult result) {

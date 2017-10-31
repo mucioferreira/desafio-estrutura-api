@@ -28,6 +28,7 @@ import com.estrutura.desafio.api.entities.Servidor;
 import com.estrutura.desafio.api.entities.Usuario;
 import com.estrutura.desafio.api.entities.UsuarioDaRede;
 import com.estrutura.desafio.api.enums.MensagemEnum;
+import com.estrutura.desafio.api.interfaces.Converter;
 import com.estrutura.desafio.api.response.Response;
 import com.estrutura.desafio.api.services.ServidorService;
 import com.estrutura.desafio.api.services.UsuarioDaRedeService;
@@ -47,17 +48,20 @@ public class UsuarioDaRedeController {
 	@Autowired
 	private ServidorService servidorService;
 	
+	@Autowired
+	private Converter converter;
+	
 	@PostMapping
 	public ResponseEntity<Response<UsuarioDaRedeDTO>> cadastrarUsuarioDaRede(@Valid @RequestBody UsuarioDaRedeDTO usuarioDaRedeDto, BindingResult result) throws NoSuchAlgorithmException {
 		Response<UsuarioDaRedeDTO> response = new Response<UsuarioDaRedeDTO>();
-		Optional<Servidor> servidor = this.servidorService.findById(usuarioDaRedeDto.getServidor());
-		Optional<Usuario> usuario = this.usuarioService.findById(usuarioDaRedeDto.getUsuario());
+		Optional<Servidor> servidor = this.servidorService.findById(usuarioDaRedeDto.getServidor().getId());
+		Optional<Usuario> usuario = this.usuarioService.findById(usuarioDaRedeDto.getUsuario().getId());
 		
 		this.validarDadosExistentes(servidor, usuario, result);
 		if(result.hasErrors()) return response.getResponseWithErrors(response, result);
 		
-		UsuarioDaRede usuarioDaRede = this.usuarioDaRedeService.save(this.converterParaUsuarioDaRede(usuarioDaRedeDto, servidor.get(), usuario.get()));
-		response.setData(this.converterParaDTO(usuarioDaRede));
+		UsuarioDaRede usuarioDaRede = this.usuarioDaRedeService.save(this.converter.converterParaEntidade(usuarioDaRedeDto, servidor.get(), usuario.get()));
+		response.setData(this.converter.converterParaDTO(usuarioDaRede));
 		return ResponseEntity.ok(response);
 	}
 	
@@ -66,16 +70,16 @@ public class UsuarioDaRedeController {
 		Response<UsuarioDaRedeDTO> response = new Response<UsuarioDaRedeDTO>();
 		
 		Optional<UsuarioDaRede> usuarioDaRede = usuarioDaRedeDto.getIdOpt().isPresent() ? this.usuarioDaRedeService.findById(usuarioDaRedeDto.getId()) : Optional.empty();
-		Optional<Servidor> servidor = this.servidorService.findById(usuarioDaRedeDto.getServidor());
-		Optional<Usuario> usuario = this.usuarioService.findById(usuarioDaRedeDto.getUsuario());
+		Optional<Servidor> servidor = this.servidorService.findById(usuarioDaRedeDto.getServidor().getId());
+		Optional<Usuario> usuario = this.usuarioService.findById(usuarioDaRedeDto.getUsuario().getId());
 
 		if(!usuarioDaRedeDto.getIdOpt().isPresent()) result.addError(new ObjectError("usuarioDaRede", String.valueOf(MensagemEnum.NENHUM_ID_DO_USUARIO_DA_REDE)));
 		else if(!usuarioDaRede.isPresent()) result.addError(new ObjectError("usuarioDaRede", String.valueOf(MensagemEnum.USUARIO_DA_REDE_NAO_ENCONTRADO)));
 		this.validarDadosExistentes(servidor, usuario, result);
 		if(result.hasErrors()) return response.getResponseWithErrors(response, result);
 			
-		UsuarioDaRede u = this.usuarioDaRedeService.save(this.converterParaUsuarioDaRede(usuarioDaRedeDto, servidor.get(), usuario.get()));
-		response.setData(this.converterParaDTO(u));
+		UsuarioDaRede u = this.usuarioDaRedeService.save(this.converter.converterParaEntidade(usuarioDaRedeDto, servidor.get(), usuario.get()));
+		response.setData(this.converter.converterParaDTO(u));
 		return ResponseEntity.ok(response);
 	}
 	
@@ -89,7 +93,7 @@ public class UsuarioDaRedeController {
 			return ResponseEntity.badRequest().body(response);
 		}
 			
-		response.setData(this.converterParaDTO(usuarioDaRede.get()));
+		response.setData(this.converter.converterParaDTO(usuarioDaRede.get()));
 		return ResponseEntity.ok(response);
 	} 
 	
@@ -102,7 +106,7 @@ public class UsuarioDaRedeController {
 	) {
 		Response<Page<UsuarioDaRedeDTO>> response = new Response<Page<UsuarioDaRedeDTO>>();
 		PageRequest pageRequest = new PageRequest(pagina, qtdPagina, Direction.valueOf(direcao), ordem);
-		Page<UsuarioDaRedeDTO> usuariosDaRedeDTO = this.usuarioDaRedeService.findAll(pageRequest).map(usuario -> this.converterParaDTO(usuario));
+		Page<UsuarioDaRedeDTO> usuariosDaRedeDTO = this.usuarioDaRedeService.findAll(pageRequest).map(usuario -> this.converter.converterParaDTO(usuario));
 		response.setData(usuariosDaRedeDTO);
 		return ResponseEntity.ok(response);
 	}
@@ -116,7 +120,7 @@ public class UsuarioDaRedeController {
 			@RequestParam(value = "direcao", defaultValue = "DESC") String direcao) throws NoSuchAlgorithmException {
 		Response<Page<UsuarioDaRedeDTO>> response = new Response<Page<UsuarioDaRedeDTO>>();
 		PageRequest pageRequest = new PageRequest(pagina, qtdPagina, Direction.valueOf(direcao), ordem);
-		Page<UsuarioDaRedeDTO> usuariosDaRedeDTO = this.usuarioDaRedeService.findByUsuarioId(id, pageRequest).map(usuarioDaRede -> this.converterParaDTO(usuarioDaRede));
+		Page<UsuarioDaRedeDTO> usuariosDaRedeDTO = this.usuarioDaRedeService.findByUsuarioId(id, pageRequest).map(usuarioDaRede -> this.converter.converterParaDTO(usuarioDaRede));
 		response.setData(usuariosDaRedeDTO);
 		return ResponseEntity.ok(response);
 	}
@@ -130,7 +134,7 @@ public class UsuarioDaRedeController {
 			@RequestParam(value = "direcao", defaultValue = "DESC") String direcao) throws NoSuchAlgorithmException {
 		Response<Page<UsuarioDaRedeDTO>> response = new Response<Page<UsuarioDaRedeDTO>>();
 		PageRequest pageRequest = new PageRequest(pagina, qtdPagina, Direction.valueOf(direcao), ordem);
-		Page<UsuarioDaRedeDTO> usuariosDaRedeDTO = this.usuarioDaRedeService.findByServidorId(id, pageRequest).map(usuarioDaRede -> this.converterParaDTO(usuarioDaRede));
+		Page<UsuarioDaRedeDTO> usuariosDaRedeDTO = this.usuarioDaRedeService.findByServidorId(id, pageRequest).map(usuarioDaRede -> this.converter.converterParaDTO(usuarioDaRede));
 		response.setData(usuariosDaRedeDTO);
 		return ResponseEntity.ok(response);
 	}
@@ -144,7 +148,7 @@ public class UsuarioDaRedeController {
 			@RequestParam(value = "direcao", defaultValue = "DESC") String direcao) throws NoSuchAlgorithmException {
 		Response<Page<UsuarioDaRedeDTO>> response = new Response<Page<UsuarioDaRedeDTO>>();
 		PageRequest pageRequest = new PageRequest(pagina, qtdPagina, Direction.valueOf(direcao), ordem);
-		Page<UsuarioDaRedeDTO> usuariosDaRedeDTO = this.usuarioDaRedeService.findByServidorIp(ip, pageRequest).map(usuarioDaRede -> this.converterParaDTO(usuarioDaRede));
+		Page<UsuarioDaRedeDTO> usuariosDaRedeDTO = this.usuarioDaRedeService.findByServidorIp(ip, pageRequest).map(usuarioDaRede -> this.converter.converterParaDTO(usuarioDaRede));
 		response.setData(usuariosDaRedeDTO);
 		return ResponseEntity.ok(response);
 	}
@@ -160,24 +164,6 @@ public class UsuarioDaRedeController {
 		}
 		
 		return ResponseEntity.ok(response);
-	}
-
-	private UsuarioDaRede converterParaUsuarioDaRede(UsuarioDaRedeDTO usuarioDaRedeDTO, Servidor servidor, Usuario usuario) {
-		UsuarioDaRede usuarioDaRede = new UsuarioDaRede();
-		usuarioDaRedeDTO.getIdOpt().ifPresent(id -> usuarioDaRede.setId(id));
-		usuarioDaRede.setServidor(servidor);
-		usuarioDaRede.setUsuario(usuario);
-		usuarioDaRedeDTO.getDescricaoDaRedeOpt().ifPresent(desc -> usuarioDaRede.setDescricaoDaRede(desc));
-		return usuarioDaRede;
-	}
-
-	private UsuarioDaRedeDTO converterParaDTO(UsuarioDaRede usuarioDaRede) {
-		UsuarioDaRedeDTO usuarioDaRedeDto = new UsuarioDaRedeDTO();
-		usuarioDaRede.getIdOpt().ifPresent(id -> usuarioDaRedeDto.setId(id));
-		usuarioDaRedeDto.setServidor(usuarioDaRede.getServidor().getId());
-		usuarioDaRedeDto.setUsuario(usuarioDaRede.getUsuario().getId());
-		usuarioDaRede.getDescricaoDaRedeOpt().ifPresent(descricao -> usuarioDaRedeDto.setDescricaoDaRede(descricao));
-		return usuarioDaRedeDto;
 	}
 	
 	private void validarDadosExistentes(Optional<Servidor> servidor, Optional<Usuario> usuario, BindingResult result) {

@@ -14,9 +14,9 @@ public class NoDaRedeDTO {
 	private Optional<Long> id;
 	
 	@NotNull(message = "Servidor não pode ser vazio.")
-	private Long servidor;
+	private ServidorDTO servidor;
 	
-	private Long proximoNo;
+	private NoDaRedeDTO proximoNo;
 	
 	@Length(max = 255, message = "Descrição deve conter até 255 caracteres.")
 	private String descricaoDaRede;
@@ -42,25 +42,25 @@ public class NoDaRedeDTO {
 		this.id = Optional.of(id);
 	}
 	
-	public Long getServidor() {
+	public ServidorDTO getServidor() {
 		return servidor;
 	}
 	
-	public void setServidor(Long servidor) {
+	public void setServidor(ServidorDTO servidor) {
 		this.servidor = servidor;
 	}
 	
-	public Long getProximoNo() {
+	public NoDaRedeDTO getProximoNo() {
 		return proximoNo;
 	}
 	
 	@JsonIgnore
-	public Optional<Long> getProximoNoOpt() {
+	public Optional<NoDaRedeDTO> getProximoNoOpt() {
 		return Optional.of(proximoNo);
 	}
 	
 	
-	public void setProximoNo(Long proximoNo) {
+	public void setProximoNo(NoDaRedeDTO proximoNo) {
 		this.proximoNo = proximoNo;
 	}
 	

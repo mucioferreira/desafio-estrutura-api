@@ -27,6 +27,7 @@ import com.estrutura.desafio.api.dtos.NoDaRedeDTO;
 import com.estrutura.desafio.api.entities.NoDaRede;
 import com.estrutura.desafio.api.entities.Servidor;
 import com.estrutura.desafio.api.enums.MensagemEnum;
+import com.estrutura.desafio.api.interfaces.Converter;
 import com.estrutura.desafio.api.response.Response;
 import com.estrutura.desafio.api.services.NoDaRedeService;
 import com.estrutura.desafio.api.services.ServidorService;
@@ -42,17 +43,20 @@ public class NoDaRedeController {
 	@Autowired
 	private ServidorService servidorService;
 	
+	@Autowired
+	private Converter converter;
+	
 	@PostMapping
 	public ResponseEntity<Response<NoDaRedeDTO>> cadastrarNoDaRede(@Valid @RequestBody NoDaRedeDTO noDaRedeDTO, BindingResult result) throws NoSuchAlgorithmException {
 		Response<NoDaRedeDTO> response = new Response<NoDaRedeDTO>();
-		Optional<Servidor> servidor = this.servidorService.findById(noDaRedeDTO.getServidor());
-		Optional<NoDaRede> proximoNo = noDaRedeDTO.getProximoNoOpt().isPresent() ? this.noDaRedeService.findById(noDaRedeDTO.getProximoNoOpt().get()) : Optional.empty();
+		Optional<Servidor> servidor = this.servidorService.findById(noDaRedeDTO.getServidor().getId());
+		Optional<NoDaRede> proximoNo = noDaRedeDTO.getProximoNoOpt().isPresent() ? this.noDaRedeService.findById(noDaRedeDTO.getProximoNoOpt().get().getId()) : Optional.empty();
 
 		this.validarDadosExistentes(noDaRedeDTO, servidor, proximoNo, result);
 		if(result.hasErrors()) return response.getResponseWithErrors(response, result);
 		
-		NoDaRede noDaRede = this.noDaRedeService.save(this.converterParaNoDaRede(noDaRedeDTO, servidor.get(), proximoNo.get()));
-		response.setData(this.converterParaDTO(noDaRede));
+		NoDaRede noDaRede = this.noDaRedeService.save(this.converter.converterParaEntidade(noDaRedeDTO, servidor.get(), proximoNo.get()));
+		response.setData(this.converter.converterParaDTO(noDaRede));
 		return ResponseEntity.ok(response);
 	}
 
@@ -60,9 +64,9 @@ public class NoDaRedeController {
 	public ResponseEntity<Response<NoDaRedeDTO>> modificarNoDaRede(@Valid @RequestBody NoDaRedeDTO noDaRedeDTO, BindingResult result) throws NoSuchAlgorithmException {
 		Response<NoDaRedeDTO> response = new Response<NoDaRedeDTO>();
 		
-		Optional<NoDaRede> noDaRede = noDaRedeDTO.getIdOpt().isPresent() ? this.noDaRedeService.findById(noDaRedeDTO.getProximoNoOpt().get()) : Optional.empty();
-		Optional<Servidor> servidor = this.servidorService.findById(noDaRedeDTO.getServidor());
-		Optional<NoDaRede> proximoNo = noDaRedeDTO.getProximoNoOpt().isPresent() ? this.noDaRedeService.findById(noDaRedeDTO.getProximoNoOpt().get()) : Optional.empty();
+		Optional<NoDaRede> noDaRede = noDaRedeDTO.getIdOpt().isPresent() ? this.noDaRedeService.findById(noDaRedeDTO.getProximoNoOpt().get().getId()) : Optional.empty();
+		Optional<Servidor> servidor = this.servidorService.findById(noDaRedeDTO.getServidor().getId());
+		Optional<NoDaRede> proximoNo = noDaRedeDTO.getProximoNoOpt().isPresent() ? this.noDaRedeService.findById(noDaRedeDTO.getProximoNoOpt().get().getId()) : Optional.empty();
 
 		if(!noDaRedeDTO.getIdOpt().isPresent()) result.addError(new ObjectError("usuarioDaRede", String.valueOf(MensagemEnum.NENHUM_NO_DA_REDE)));
 		else if(!noDaRede.isPresent()) result.addError(new ObjectError("usuarioDaRede", String.valueOf(MensagemEnum.NO_DA_REDE_NAO_ENCONTRADO)));
@@ -70,8 +74,8 @@ public class NoDaRedeController {
 		if(result.hasErrors()) return response.getResponseWithErrors(response, result);
 			
 			
-		NoDaRede n = this.noDaRedeService.save(this.converterParaNoDaRede(noDaRedeDTO, servidor.get(), proximoNo.get()));
-		response.setData(this.converterParaDTO(n));
+		NoDaRede n = this.noDaRedeService.save(this.converter.converterParaEntidade(noDaRedeDTO, servidor.get(), proximoNo.get()));
+		response.setData(this.converter.converterParaDTO(n));
 		return ResponseEntity.ok(response);
 	}
 	
@@ -85,7 +89,7 @@ public class NoDaRedeController {
 			return ResponseEntity.badRequest().body(response);
 		}
 			
-		response.setData(this.converterParaDTO(noDaRede.get()));
+		response.setData(this.converter.converterParaDTO(noDaRede.get()));
 		return ResponseEntity.ok(response);
 	} 
 	
@@ -98,7 +102,7 @@ public class NoDaRedeController {
 			@RequestParam(value = "direcao", defaultValue = "DESC") String direcao) throws NoSuchAlgorithmException {
 		Response<Page<NoDaRedeDTO>> response = new Response<Page<NoDaRedeDTO>>();
 		PageRequest pageRequest = new PageRequest(pagina, qtdPagina, Direction.valueOf(direcao), ordem);
-		Page<NoDaRedeDTO> nosDaRedeDto = this.noDaRedeService.findByServidorId(id, pageRequest).map(noDaRede -> this.converterParaDTO(noDaRede));
+		Page<NoDaRedeDTO> nosDaRedeDto = this.noDaRedeService.findByServidorId(id, pageRequest).map(noDaRede -> this.converter.converterParaDTO(noDaRede));
 		response.setData(nosDaRedeDto);
 		return ResponseEntity.ok(response);
 	}
@@ -112,7 +116,7 @@ public class NoDaRedeController {
 			@RequestParam(value = "direcao", defaultValue = "DESC") String direcao) throws NoSuchAlgorithmException {
 		Response<Page<NoDaRedeDTO>> response = new Response<Page<NoDaRedeDTO>>();
 		PageRequest pageRequest = new PageRequest(pagina, qtdPagina, Direction.valueOf(direcao), ordem);
-		Page<NoDaRedeDTO> nosDaRedeDto = this.noDaRedeService.findAll(pageRequest).map(noDaRede -> this.converterParaDTO(noDaRede));
+		Page<NoDaRedeDTO> nosDaRedeDto = this.noDaRedeService.findAll(pageRequest).map(noDaRede -> this.converter.converterParaDTO(noDaRede));
 		response.setData(nosDaRedeDto);
 		return ResponseEntity.ok(response);
 	}
@@ -126,7 +130,7 @@ public class NoDaRedeController {
 			@RequestParam(value = "direcao", defaultValue = "DESC") String direcao) throws NoSuchAlgorithmException {
 		Response<Page<NoDaRedeDTO>> response = new Response<Page<NoDaRedeDTO>>();
 		PageRequest pageRequest = new PageRequest(pagina, qtdPagina, Direction.valueOf(direcao), ordem);
-		Page<NoDaRedeDTO> nosDaRedeDto = this.noDaRedeService.findByServidorIp(ip, pageRequest).map(noDaRede -> this.converterParaDTO(noDaRede));
+		Page<NoDaRedeDTO> nosDaRedeDto = this.noDaRedeService.findByServidorIp(ip, pageRequest).map(noDaRede -> this.converter.converterParaDTO(noDaRede));
 		response.setData(nosDaRedeDto);
 		return ResponseEntity.ok(response);
 	}
@@ -140,40 +144,13 @@ public class NoDaRedeController {
 			return ResponseEntity.badRequest().body(response);
 		}
 			
-		this.noDaRedeService.delete(this.converterParaNoDaRede(noDaRedeDto));
+		this.noDaRedeService.delete(this.converter.converterParaEntidade(noDaRedeDto));
 		return ResponseEntity.ok(response);
 	} 
 	
 	private void validarDadosExistentes(NoDaRedeDTO noDaRedeDTO, Optional<Servidor> servidor, Optional<NoDaRede> proximoNo, BindingResult result) {
 		if(!servidor.isPresent()) result.addError(new ObjectError("servidor", String.valueOf(MensagemEnum.SERVIDOR_NAO_ENCONTRADO)));
 		if(noDaRedeDTO.getProximoNoOpt().isPresent() && !proximoNo.isPresent()) result.addError(new ObjectError("proximoNo", String.valueOf(MensagemEnum.PROXIMO_NO_NAO_ENCONTRADO)));
-	}
-
-	
-	private NoDaRede converterParaNoDaRede(NoDaRedeDTO noDaRedeDTO, Servidor servidor, NoDaRede proximoNo) {
-		NoDaRede noDaRede = new NoDaRede();
-		noDaRedeDTO.getIdOpt().ifPresent(id -> noDaRede.setId(id));
-		noDaRede.setServidor(servidor);
-		noDaRedeDTO.getProximoNoOpt().ifPresent(no -> noDaRede.setProximoNo(proximoNo));
-		noDaRede.setAmbienteDaRede(noDaRedeDTO.getAmbienteDaRede());
-		noDaRedeDTO.getDescricaoDaRedeOpt().ifPresent(desc -> noDaRede.setDescricaoDaRede(desc));
-		return noDaRede;
-	}
-	
-	private NoDaRede converterParaNoDaRede(NoDaRedeDTO noDaRedeDTO) {
-		NoDaRede noDaRede = new NoDaRede();
-		noDaRedeDTO.getIdOpt().ifPresent(id -> noDaRede.setId(id));
-		return noDaRede;
-	}
-
-	private NoDaRedeDTO converterParaDTO(NoDaRede noDaRede) {
-		NoDaRedeDTO noDaRedeDTO = new NoDaRedeDTO();
-		noDaRede.getIdOpt().ifPresent(id -> noDaRedeDTO.setId(id));
-		noDaRedeDTO.setServidor(noDaRede.getServidor().getId());
-		noDaRede.getProximoNoOpt().ifPresent(proximo -> noDaRedeDTO.setProximoNo(proximo.getId()));
-		noDaRede.getDescricaoDaRedeOpt().ifPresent(descricao -> noDaRedeDTO.setDescricaoDaRede(descricao));
-		noDaRedeDTO.setAmbienteDaRede(noDaRede.getAmbienteDaRede());
-		return noDaRedeDTO;
 	}
 	
 }
