@@ -1,6 +1,8 @@
 package com.estrutura.desafio.api.controllers;
 
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import javax.validation.Valid;
@@ -111,6 +113,15 @@ public class ServidorController {
 		}
 
 		response.setData(this.converterParaDTO(servidor.get()));
+		return ResponseEntity.ok(response);
+	}
+	
+	@GetMapping(params = "ip")
+	public ResponseEntity<Response<List<ServidorDTO>>> buscarServidoresPeloIp(@RequestParam("ip") String ip) throws NoSuchAlgorithmException {
+		Response<List<ServidorDTO>> response = new Response<List<ServidorDTO>>();
+		List<ServidorDTO> servidoresDto = new ArrayList<ServidorDTO>();
+		this.servidorService.findByLikeIp(ip).forEach(servidor -> servidoresDto.add(this.converterParaDTO(servidor)));
+		response.setData(servidoresDto);
 		return ResponseEntity.ok(response);
 	}
 	

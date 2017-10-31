@@ -1,7 +1,9 @@
 package com.estrutura.desafio.api.services;
 
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.junit.Before;
@@ -35,6 +37,12 @@ public class ServidorServiceTest {
 	public void testProcurarPorID() {
 		Optional<Servidor> servidor = this.servidorService.findById(1L);
 		assertTrue(servidor.isPresent());
+	}
+	
+	@Test
+	public void testProcurarPorIP() {
+		List<Servidor> servidor = this.servidorService.findByLikeIp(IP);
+		assertNotNull(servidor);
 	}
 	
 	private Servidor dadosServidor() {
