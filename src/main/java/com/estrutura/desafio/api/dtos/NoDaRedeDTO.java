@@ -55,12 +55,6 @@ public class NoDaRedeDTO {
 		return proximoNo;
 	}
 	
-	@JsonIgnore
-	public Optional<NoDaRedeDTO> getProximoNoOpt() {
-		return Optional.of(proximoNo);
-	}
-	
-	
 	public void setProximoNo(NoDaRedeDTO proximoNo) {
 		this.proximoNo = proximoNo;
 	}
@@ -80,6 +74,10 @@ public class NoDaRedeDTO {
 	
 	public AmbienteDaRedeEnum getAmbienteDaRede() {
 		return ambienteDaRede;
+	}
+	
+	public String getNomeAmbienteDaRede() {
+		return AmbienteDaRedeEnum.getNomeTipoServidor(ambienteDaRede);
 	}
 	
 	public void setAmbienteDaRede(AmbienteDaRedeEnum ambienteDaRede) {

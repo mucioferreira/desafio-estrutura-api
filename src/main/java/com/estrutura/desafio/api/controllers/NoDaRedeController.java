@@ -51,13 +51,14 @@ public class NoDaRedeController {
 	@PostMapping
 	public ResponseEntity<Response<NoDaRedeDTO>> cadastrarNoDaRede(@Valid @RequestBody NoDaRedeDTO noDaRedeDTO, BindingResult result) throws NoSuchAlgorithmException {
 		Response<NoDaRedeDTO> response = new Response<NoDaRedeDTO>();
+		
 		Optional<Servidor> servidor = this.servidorService.findById(noDaRedeDTO.getServidor().getId());
-		Optional<NoDaRede> proximoNo = noDaRedeDTO.getProximoNoOpt().isPresent() ? this.noDaRedeService.findById(noDaRedeDTO.getProximoNoOpt().get().getId()) : Optional.empty();
+		Optional<NoDaRede> proximoNo = (noDaRedeDTO.getProximoNo() != null) ? this.noDaRedeService.findById(noDaRedeDTO.getProximoNo().getId()) : Optional.empty();
 
 		this.validarDadosExistentes(noDaRedeDTO, servidor, proximoNo, result);
 		if(result.hasErrors()) return response.getResponseWithErrors(response, result);
 		
-		NoDaRede noDaRede = this.noDaRedeService.save(this.converter.converterParaEntidade(noDaRedeDTO, servidor.get(), proximoNo.get()));
+		NoDaRede noDaRede = this.noDaRedeService.save(this.converter.converterParaEntidade(noDaRedeDTO, servidor.get(), proximoNo));
 		response.setData(this.converter.converterParaDTO(noDaRede));
 		return ResponseEntity.ok(response);
 	}
@@ -66,9 +67,9 @@ public class NoDaRedeController {
 	public ResponseEntity<Response<NoDaRedeDTO>> modificarNoDaRede(@Valid @RequestBody NoDaRedeDTO noDaRedeDTO, BindingResult result) throws NoSuchAlgorithmException {
 		Response<NoDaRedeDTO> response = new Response<NoDaRedeDTO>();
 		
-		Optional<NoDaRede> noDaRede = noDaRedeDTO.getIdOpt().isPresent() ? this.noDaRedeService.findById(noDaRedeDTO.getProximoNoOpt().get().getId()) : Optional.empty();
+		Optional<NoDaRede> noDaRede = noDaRedeDTO.getIdOpt().isPresent() ? this.noDaRedeService.findById(noDaRedeDTO.getId()) : Optional.empty();
 		Optional<Servidor> servidor = this.servidorService.findById(noDaRedeDTO.getServidor().getId());
-		Optional<NoDaRede> proximoNo = noDaRedeDTO.getProximoNoOpt().isPresent() ? this.noDaRedeService.findById(noDaRedeDTO.getProximoNoOpt().get().getId()) : Optional.empty();
+		Optional<NoDaRede> proximoNo = (noDaRedeDTO.getProximoNo() != null) ? this.noDaRedeService.findById(noDaRedeDTO.getProximoNo().getId()) : Optional.empty();
 
 		if(!noDaRedeDTO.getIdOpt().isPresent()) result.addError(new ObjectError("usuarioDaRede", String.valueOf(MensagemEnum.NENHUM_NO_DA_REDE)));
 		else if(!noDaRede.isPresent()) result.addError(new ObjectError("usuarioDaRede", String.valueOf(MensagemEnum.NO_DA_REDE_NAO_ENCONTRADO)));
@@ -76,7 +77,7 @@ public class NoDaRedeController {
 		if(result.hasErrors()) return response.getResponseWithErrors(response, result);
 			
 			
-		NoDaRede n = this.noDaRedeService.save(this.converter.converterParaEntidade(noDaRedeDTO, servidor.get(), proximoNo.get()));
+		NoDaRede n = this.noDaRedeService.save(this.converter.converterParaEntidade(noDaRedeDTO, servidor.get(), proximoNo));
 		response.setData(this.converter.converterParaDTO(n));
 		return ResponseEntity.ok(response);
 	}
@@ -111,7 +112,6 @@ public class NoDaRedeController {
 	
 	@GetMapping
 	public ResponseEntity<Response<Page<NoDaRedeDTO>>> todosNosoDaRede(
-			@PathVariable("id") Long id,
 			@RequestParam(value = "pagina", defaultValue = "0") int pagina,
 			@RequestParam(value = "qtdPagina", defaultValue = "10") int qtdPagina,
 			@RequestParam(value = "ordem", defaultValue = "id") String ordem,
@@ -141,13 +141,24 @@ public class NoDaRedeController {
 			return ResponseEntity.badRequest().body(response);
 		}
 			
-		this.noDaRedeService.delete(this.converter.converterParaEntidade(noDaRedeDto));
+		
+		try {
+			this.noDaRedeService.delete(this.converter.converterParaEntidade(noDaRedeDto));
+		} catch (Exception e) {
+			response.getErrors().add(String.valueOf(MensagemEnum.NO_NAO_PODE_EXCLUIDO));
+			return ResponseEntity.badRequest().body(response);
+		}
+		
 		return ResponseEntity.ok(response);
 	} 
 	
 	private void validarDadosExistentes(NoDaRedeDTO noDaRedeDTO, Optional<Servidor> servidor, Optional<NoDaRede> proximoNo, BindingResult result) {
 		if(!servidor.isPresent()) result.addError(new ObjectError("servidor", String.valueOf(MensagemEnum.SERVIDOR_NAO_ENCONTRADO)));
-		if(noDaRedeDTO.getProximoNoOpt().isPresent() && !proximoNo.isPresent()) result.addError(new ObjectError("proximoNo", String.valueOf(MensagemEnum.PROXIMO_NO_NAO_ENCONTRADO)));
+		if((noDaRedeDTO.getProximoNo() != null) && !proximoNo.isPresent()) result.addError(new ObjectError("proximoNo", String.valueOf(MensagemEnum.PROXIMO_NO_NAO_ENCONTRADO)));
+		if(proximoNo.isPresent() && !noDaRedeDTO.getAmbienteDaRede().equals(proximoNo.get().getAmbienteDaRede())) 
+			result.addError(new ObjectError("ambienteDaRede", String.valueOf(MensagemEnum.AMBIENTE_DIFERENTE)));
+		if((proximoNo.isPresent() && servidor.isPresent()) && proximoNo.get().getServidor().getId().equals(noDaRedeDTO.getServidor().getId()))
+			result.addError(new ObjectError("ambienteDaRede", String.valueOf(MensagemEnum.MESMO_SERVIDOR)));
 	}
 	
 }

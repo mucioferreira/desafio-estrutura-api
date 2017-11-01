@@ -10,6 +10,7 @@ public enum MensagemEnum {
 	USUARIO_NAO_ENCONTRADO("Usuário não encontrado."),
 	USUARIO_DA_REDE_NAO_ENCONTRADO("Usuário da rede não encontrado."),
 	NO_DA_REDE_NAO_ENCONTRADO("No da rede não encontrado."),
+	NO_NAO_PODE_EXCLUIDO("Esse nó não pode ser excluido."),
 	USUARIO_NAO_PERTENCE_A_REDE("Usuário não esta cadastrado em nenhuma rede."),
 	TIPO_DO_SERVIDOR_NAO_EXISTE("Tipo do servidor é inválido, tente novamente."),
 	SERVIDOR_NAO_PERTENCE_A_REDE("Servidor não esta cadastrado em nenhuma rede."),
@@ -19,6 +20,8 @@ public enum MensagemEnum {
 	SERVIDOR_JA_EXISTE("Servidor com o mesmo IP já cadastrado."),
 	NENHUM_ID_DO_SERVIDOR("Servidor não está cadastro do sistema."),
 	PROXIMO_NO_NAO_ENCONTRADO("Proximo No não encontrado."),
+	AMBIENTE_DIFERENTE("Ambiente da Rede não pode ser diferente do proximo no."),
+	MESMO_SERVIDOR("Servidor não pode ser igual ao do proximo nó."),
 	NENHUM_ID_DO_USUARIO("Usuário não está cadastro do sistema."),
 	NENHUM_ID_DO_USUARIO_DA_REDE("Usuário da Rede não está cadastro do sistema."),
 	NENHUM_NO_DA_REDE("No da Rede não está cadastro do sistema.");

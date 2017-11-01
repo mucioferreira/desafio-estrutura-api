@@ -1,5 +1,7 @@
 package com.estrutura.desafio.api.interfaces.impl;
 
+import java.util.Optional;
+
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -44,7 +46,6 @@ public class ConverterImpl implements Converter {
 	
 	public NoDaRedeDTO converterParaDTO(NoDaRede noDaRede) {
 		if(noDaRede == null) return null;
-		
 		NoDaRedeDTO noDaRedeDTO = new NoDaRedeDTO();
 		noDaRedeDTO.setId(noDaRede.getId());
 		noDaRedeDTO.setServidor(this.converterParaDTO(noDaRede.getServidor()));
@@ -79,11 +80,11 @@ public class ConverterImpl implements Converter {
 		return usuarioDaRede;
 	}
 	
-	public NoDaRede converterParaEntidade(NoDaRedeDTO noDaRedeDTO, Servidor servidor, NoDaRede proximoNo) {
+	public NoDaRede converterParaEntidade(NoDaRedeDTO noDaRedeDTO, Servidor servidor, Optional<NoDaRede> proximoNo) {
 		NoDaRede noDaRede = new NoDaRede();
 		noDaRedeDTO.getIdOpt().ifPresent(id -> noDaRede.setId(id));
 		noDaRede.setServidor(servidor);
-		noDaRedeDTO.getProximoNoOpt().ifPresent(no -> noDaRede.setProximoNo(proximoNo));
+		proximoNo.ifPresent(proximo -> noDaRede.setProximoNo(proximo));
 		noDaRede.setAmbienteDaRede(noDaRedeDTO.getAmbienteDaRede());
 		noDaRedeDTO.getDescricaoDaRedeOpt().ifPresent(desc -> noDaRede.setDescricaoDaRede(desc));
 		return noDaRede;

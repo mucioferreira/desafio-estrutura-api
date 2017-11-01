@@ -1,5 +1,7 @@
 package com.estrutura.desafio.api.interfaces;
 
+import java.util.Optional;
+
 import org.springframework.stereotype.Component;
 
 import com.estrutura.desafio.api.dtos.NoDaRedeDTO;
@@ -28,7 +30,7 @@ public interface Converter {
 
 	public UsuarioDaRede converterParaEntidade(UsuarioDaRedeDTO usuarioDaRedeDTO, Servidor servidor, Usuario usuario);
 
-	public NoDaRede converterParaEntidade(NoDaRedeDTO noDaRedeDTO, Servidor servidor, NoDaRede proximoNo);
+	public NoDaRede converterParaEntidade(NoDaRedeDTO noDaRedeDTO, Servidor servidor, Optional<NoDaRede> proximoNo);
 
 	public NoDaRede converterParaEntidade(NoDaRedeDTO noDaRedeDTO);
 	
