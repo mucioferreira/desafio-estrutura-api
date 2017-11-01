@@ -31,5 +31,7 @@ public interface Converter {
 	public NoDaRede converterParaEntidade(NoDaRedeDTO noDaRedeDTO, Servidor servidor, NoDaRede proximoNo);
 
 	public NoDaRede converterParaEntidade(NoDaRedeDTO noDaRedeDTO);
+	
+	public UsuarioDaRede converterParaEntidade(UsuarioDaRedeDTO usuarioDaRedeDTO);
 
 }

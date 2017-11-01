@@ -92,5 +92,11 @@ public class ConverterImpl implements Converter {
 		noDaRedeDTO.getIdOpt().ifPresent(id -> noDaRede.setId(id));
 		return noDaRede;
 	}
+	
+	public UsuarioDaRede converterParaEntidade(UsuarioDaRedeDTO usuarioDaRedeDTO) {
+		UsuarioDaRede usuarioDaRede = new UsuarioDaRede();
+		usuarioDaRedeDTO.getIdOpt().ifPresent(id -> usuarioDaRede.setId(id));
+		return usuarioDaRede;
+	}
 
 }

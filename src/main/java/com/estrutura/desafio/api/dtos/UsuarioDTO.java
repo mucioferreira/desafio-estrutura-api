@@ -24,7 +24,7 @@ public class UsuarioDTO {
 	}
 
 	public Long getId() {
-		return id.get();
+		return id.isPresent() ? id.get() : null;
 	}
 	
 	@JsonIgnore

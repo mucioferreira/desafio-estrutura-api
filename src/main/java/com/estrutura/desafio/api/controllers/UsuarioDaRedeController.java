@@ -154,15 +154,15 @@ public class UsuarioDaRedeController {
 	}
 	
 	@DeleteMapping
-	public ResponseEntity<Response<UsuarioDaRedeDTO>> deletarServidor(@RequestBody UsuarioDaRedeDTO usuarioDaRedeDto) throws NoSuchAlgorithmException {
+	public ResponseEntity<Response<UsuarioDaRedeDTO>> deletarUsuarioDaRede(@RequestBody UsuarioDaRedeDTO usuarioDaRedeDto) throws NoSuchAlgorithmException {
 		Response<UsuarioDaRedeDTO> response = new Response<UsuarioDaRedeDTO>();
-		Optional<UsuarioDaRede> usuarioDaRede = this.usuarioDaRedeService.findById(usuarioDaRedeDto.getId());
 		
-		if(!usuarioDaRede.isPresent()) {
-			response.getErrors().add(String.valueOf(MensagemEnum.USUARIO_DA_REDE_NAO_ENCONTRADO));
+		if(!this.usuarioDaRedeService.findById(usuarioDaRedeDto.getId()).isPresent()) {
+			response.getErrors().add(String.valueOf(MensagemEnum.NO_DA_REDE_NAO_ENCONTRADO));
 			return ResponseEntity.badRequest().body(response);
 		}
-		
+			
+		this.usuarioDaRedeService.delete(this.converter.converterParaEntidade(usuarioDaRedeDto));
 		return ResponseEntity.ok(response);
 	}
 	
