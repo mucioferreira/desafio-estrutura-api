@@ -4,6 +4,8 @@ import java.util.Optional;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -29,9 +31,10 @@ public class NoDaRede {
 	private Servidor servidor;
 	
 	@ManyToOne(fetch = FetchType.EAGER, targetEntity = NoDaRede.class)
-	@JoinColumn(name = "proximo_no")
+	@JoinColumn(name = "proximo_no", nullable = true)
 	private NoDaRede proximoNo;
 	
+	@Enumerated(EnumType.STRING)
 	@Column(name = "ambiente", nullable = false)
 	private AmbienteDaRedeEnum ambienteDaRede;
 	

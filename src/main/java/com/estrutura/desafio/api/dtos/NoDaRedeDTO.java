@@ -27,6 +27,7 @@ public class NoDaRedeDTO {
 	public NoDaRedeDTO() {
 		this.id = Optional.empty();
 		this.descricaoDaRede = new String();
+		this.proximoNo = null;
 	}
 
 	public Long getId() {

@@ -32,12 +32,6 @@ public class Servidor {
 	@Enumerated(EnumType.STRING)
 	@Column(name = "tipo", nullable = false)
 	private TipoServidorEnum tipo;
-
-//	@OneToMany(mappedBy = "servidor", fetch = FetchType.EAGER, cascade = CascadeType.ALL, targetEntity = NoDaRede.class)
-//	private List<NoDaRede> noDaRede;
-//	
-//	@OneToMany(mappedBy = "servidor", fetch = FetchType.LAZY, cascade = CascadeType.ALL, targetEntity = UsuarioDaRede.class)
-//	private List<UsuarioDaRede> usuarioDaRede;
 	
 	public Servidor() {}
 

@@ -1,6 +1,8 @@
 package com.estrutura.desafio.api.controllers;
 
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import javax.validation.Valid;
@@ -85,7 +87,7 @@ public class NoDaRedeController {
 		Optional<NoDaRede> noDaRede = this.noDaRedeService.findById(id);
 		
 		if(!noDaRede.isPresent()) {
-			response.getErrors().add(String.valueOf(MensagemEnum.USUARIO_NAO_ENCONTRADO));
+			response.getErrors().add(String.valueOf(MensagemEnum.NO_DA_REDE_NAO_ENCONTRADO));
 			return ResponseEntity.badRequest().body(response);
 		}
 			
@@ -120,17 +122,12 @@ public class NoDaRedeController {
 		response.setData(nosDaRedeDto);
 		return ResponseEntity.ok(response);
 	}
-	
-	@GetMapping(value = "/servidor/ip/{ip}")
-	public ResponseEntity<Response<Page<NoDaRedeDTO>>> procurarNoDaRedePeloIpDoServidor(
-			@PathVariable("ip") String ip,
-			@RequestParam(value = "pagina", defaultValue = "0") int pagina,
-			@RequestParam(value = "qtdPagina", defaultValue = "10") int qtdPagina,
-			@RequestParam(value = "ordem", defaultValue = "id") String ordem,
-			@RequestParam(value = "direcao", defaultValue = "DESC") String direcao) throws NoSuchAlgorithmException {
-		Response<Page<NoDaRedeDTO>> response = new Response<Page<NoDaRedeDTO>>();
-		PageRequest pageRequest = new PageRequest(pagina, qtdPagina, Direction.valueOf(direcao), ordem);
-		Page<NoDaRedeDTO> nosDaRedeDto = this.noDaRedeService.findByServidorIp(ip, pageRequest).map(noDaRede -> this.converter.converterParaDTO(noDaRede));
+
+	@GetMapping(params = "ip")
+	public ResponseEntity<Response<List<NoDaRedeDTO>>> buscarServidoresPeloIp(@RequestParam("ip") String ip) throws NoSuchAlgorithmException {
+		Response<List<NoDaRedeDTO>> response = new Response<List<NoDaRedeDTO>>();
+		List<NoDaRedeDTO> nosDaRedeDto = new ArrayList<NoDaRedeDTO>();
+		if(ip != "") this.noDaRedeService.findByLikeIp(ip).forEach(servidor -> nosDaRedeDto.add(this.converter.converterParaDTO(servidor)));
 		response.setData(nosDaRedeDto);
 		return ResponseEntity.ok(response);
 	}

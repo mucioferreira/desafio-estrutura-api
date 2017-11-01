@@ -43,10 +43,12 @@ public class ConverterImpl implements Converter {
 	}
 	
 	public NoDaRedeDTO converterParaDTO(NoDaRede noDaRede) {
+		if(noDaRede == null) return null;
+		
 		NoDaRedeDTO noDaRedeDTO = new NoDaRedeDTO();
-		noDaRede.getIdOpt().ifPresent(id -> noDaRedeDTO.setId(id));
+		noDaRedeDTO.setId(noDaRede.getId());
 		noDaRedeDTO.setServidor(this.converterParaDTO(noDaRede.getServidor()));
-		noDaRede.getProximoNoOpt().ifPresent(proximo -> noDaRedeDTO.setProximoNo(this.converterParaDTO(proximo)));
+		noDaRedeDTO.setProximoNo(this.converterParaDTO(noDaRede.getProximoNo()));
 		noDaRede.getDescricaoDaRedeOpt().ifPresent(descricao -> noDaRedeDTO.setDescricaoDaRede(descricao));
 		noDaRedeDTO.setAmbienteDaRede(noDaRede.getAmbienteDaRede());
 		return noDaRedeDTO;
