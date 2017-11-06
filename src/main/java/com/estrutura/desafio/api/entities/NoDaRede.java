@@ -70,7 +70,7 @@ public class NoDaRede {
 	
 	@Transient
 	public Optional<NoDaRede> getProximoNoOpt() {
-		return Optional.of(proximoNo);
+		return (this.proximoNo != null) ? Optional.of(this.proximoNo) : Optional.empty();
 	}
 
 	public void setProximoNo(NoDaRede proximoNo) {

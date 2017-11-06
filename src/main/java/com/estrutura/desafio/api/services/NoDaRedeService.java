@@ -23,7 +23,9 @@ public interface NoDaRedeService extends JpaRepository<NoDaRede, Long>{
 	Optional<NoDaRede> findById(Long id);
 	Page<NoDaRede> findByServidorId(@Param("servidorId") Long id, Pageable page);
 	Page<NoDaRede> findByServidorIp(@Param("servidorIp") String ip, Pageable page);
-
+	
 	@Query("SELECT rede FROM NoDaRede rede WHERE rede.servidor.ip LIKE CONCAT('%',:servidorIp,'%')")
 	List<NoDaRede> findByLikeIp(@Param("servidorIp") String ip);
+	
+	
 }

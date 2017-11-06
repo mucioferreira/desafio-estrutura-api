@@ -52,8 +52,8 @@ public class NoDaRedeController {
 	public ResponseEntity<Response<NoDaRedeDTO>> cadastrarNoDaRede(@Valid @RequestBody NoDaRedeDTO noDaRedeDTO, BindingResult result) throws NoSuchAlgorithmException {
 		Response<NoDaRedeDTO> response = new Response<NoDaRedeDTO>();
 		
-		Optional<Servidor> servidor = this.servidorService.findById(noDaRedeDTO.getServidor().getId());
-		Optional<NoDaRede> proximoNo = (noDaRedeDTO.getProximoNo() != null) ? this.noDaRedeService.findById(noDaRedeDTO.getProximoNo().getId()) : Optional.empty();
+		Optional<Servidor> servidor = this.servidorService.findById(noDaRedeDTO.getServidor());
+		Optional<NoDaRede> proximoNo = (noDaRedeDTO.getProximo() != null) ? this.noDaRedeService.findById(noDaRedeDTO.getProximo()) : Optional.empty();
 
 		this.validarDadosExistentes(noDaRedeDTO, servidor, proximoNo, result);
 		if(result.hasErrors()) return response.getResponseWithErrors(response, result);
@@ -68,8 +68,8 @@ public class NoDaRedeController {
 		Response<NoDaRedeDTO> response = new Response<NoDaRedeDTO>();
 		
 		Optional<NoDaRede> noDaRede = noDaRedeDTO.getIdOpt().isPresent() ? this.noDaRedeService.findById(noDaRedeDTO.getId()) : Optional.empty();
-		Optional<Servidor> servidor = this.servidorService.findById(noDaRedeDTO.getServidor().getId());
-		Optional<NoDaRede> proximoNo = (noDaRedeDTO.getProximoNo() != null) ? this.noDaRedeService.findById(noDaRedeDTO.getProximoNo().getId()) : Optional.empty();
+		Optional<Servidor> servidor = this.servidorService.findById(noDaRedeDTO.getServidor());
+		Optional<NoDaRede> proximoNo = (noDaRedeDTO.getProximo() != null) ? this.noDaRedeService.findById(noDaRedeDTO.getProximo()) : Optional.empty();
 
 		if(!noDaRedeDTO.getIdOpt().isPresent()) result.addError(new ObjectError("usuarioDaRede", String.valueOf(MensagemEnum.NENHUM_NO_DA_REDE)));
 		else if(!noDaRede.isPresent()) result.addError(new ObjectError("usuarioDaRede", String.valueOf(MensagemEnum.NO_DA_REDE_NAO_ENCONTRADO)));
@@ -132,6 +132,15 @@ public class NoDaRedeController {
 		return ResponseEntity.ok(response);
 	}
 	
+	@GetMapping(value = "todos")
+	public ResponseEntity<Response<List<NoDaRedeDTO>>> buscarServidoresPeloAmbiente() throws NoSuchAlgorithmException {
+		Response<List<NoDaRedeDTO>> response = new Response<List<NoDaRedeDTO>>();
+		List<NoDaRedeDTO> nosDaRedeDto = new ArrayList<NoDaRedeDTO>();
+		this.noDaRedeService.findAll().forEach(servidor -> nosDaRedeDto.add(this.converter.converterParaDTO(servidor)));
+		response.setData(nosDaRedeDto);
+		return ResponseEntity.ok(response);
+	}
+	
 	@DeleteMapping
 	public ResponseEntity<Response<NoDaRedeDTO>> deletarNoDaRede(@RequestBody NoDaRedeDTO noDaRedeDto) throws NoSuchAlgorithmException {
 		Response<NoDaRedeDTO> response = new Response<NoDaRedeDTO>();
@@ -154,10 +163,10 @@ public class NoDaRedeController {
 	
 	private void validarDadosExistentes(NoDaRedeDTO noDaRedeDTO, Optional<Servidor> servidor, Optional<NoDaRede> proximoNo, BindingResult result) {
 		if(!servidor.isPresent()) result.addError(new ObjectError("servidor", String.valueOf(MensagemEnum.SERVIDOR_NAO_ENCONTRADO)));
-		if((noDaRedeDTO.getProximoNo() != null) && !proximoNo.isPresent()) result.addError(new ObjectError("proximoNo", String.valueOf(MensagemEnum.PROXIMO_NO_NAO_ENCONTRADO)));
+		if((noDaRedeDTO.getProximo() != null) && !proximoNo.isPresent()) result.addError(new ObjectError("proximoNo", String.valueOf(MensagemEnum.PROXIMO_NO_NAO_ENCONTRADO)));
 		if(proximoNo.isPresent() && !noDaRedeDTO.getAmbienteDaRede().equals(proximoNo.get().getAmbienteDaRede())) 
 			result.addError(new ObjectError("ambienteDaRede", String.valueOf(MensagemEnum.AMBIENTE_DIFERENTE)));
-		if((proximoNo.isPresent() && servidor.isPresent()) && proximoNo.get().getServidor().getId().equals(noDaRedeDTO.getServidor().getId()))
+		if((proximoNo.isPresent() && servidor.isPresent()) && proximoNo.get().getServidor().getId().equals(noDaRedeDTO.getServidor()))
 			result.addError(new ObjectError("ambienteDaRede", String.valueOf(MensagemEnum.MESMO_SERVIDOR)));
 	}
 	
