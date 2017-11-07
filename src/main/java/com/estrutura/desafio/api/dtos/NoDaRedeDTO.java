@@ -14,7 +14,7 @@ public class NoDaRedeDTO {
 	private Optional<Long> id;
 	
 	@NotNull(message = "Servidor não pode ser vazio.")
-	private Long servidor;
+	private ServidorDTO servidor;
 	
 	private Long proximo;
 	
@@ -42,11 +42,11 @@ public class NoDaRedeDTO {
 		this.id = Optional.of(id);
 	}
 	
-	public Long getServidor() {
+	public ServidorDTO getServidor() {
 		return servidor;
 	}
 	
-	public void setServidor(Long servidor) {
+	public void setServidor(ServidorDTO servidor) {
 		this.servidor = servidor;
 	}
 	

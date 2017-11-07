@@ -52,7 +52,7 @@ public class NoDaRedeController {
 	public ResponseEntity<Response<NoDaRedeDTO>> cadastrarNoDaRede(@Valid @RequestBody NoDaRedeDTO noDaRedeDTO, BindingResult result) throws NoSuchAlgorithmException {
 		Response<NoDaRedeDTO> response = new Response<NoDaRedeDTO>();
 		
-		Optional<Servidor> servidor = this.servidorService.findById(noDaRedeDTO.getServidor());
+		Optional<Servidor> servidor = this.servidorService.findById(noDaRedeDTO.getServidor().getId());
 		Optional<NoDaRede> proximoNo = (noDaRedeDTO.getProximo() != null) ? this.noDaRedeService.findById(noDaRedeDTO.getProximo()) : Optional.empty();
 
 		this.validarDadosExistentes(noDaRedeDTO, servidor, proximoNo, result);
@@ -68,7 +68,7 @@ public class NoDaRedeController {
 		Response<NoDaRedeDTO> response = new Response<NoDaRedeDTO>();
 		
 		Optional<NoDaRede> noDaRede = noDaRedeDTO.getIdOpt().isPresent() ? this.noDaRedeService.findById(noDaRedeDTO.getId()) : Optional.empty();
-		Optional<Servidor> servidor = this.servidorService.findById(noDaRedeDTO.getServidor());
+		Optional<Servidor> servidor = this.servidorService.findById(noDaRedeDTO.getServidor().getId());
 		Optional<NoDaRede> proximoNo = (noDaRedeDTO.getProximo() != null) ? this.noDaRedeService.findById(noDaRedeDTO.getProximo()) : Optional.empty();
 
 		if(!noDaRedeDTO.getIdOpt().isPresent()) result.addError(new ObjectError("usuarioDaRede", String.valueOf(MensagemEnum.NENHUM_NO_DA_REDE)));

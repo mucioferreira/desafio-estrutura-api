@@ -1,6 +1,8 @@
 package com.estrutura.desafio.api.controllers;
 
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import javax.validation.Valid;
@@ -108,6 +110,15 @@ public class UsuarioDaRedeController {
 		PageRequest pageRequest = new PageRequest(pagina, qtdPagina, Direction.valueOf(direcao), ordem);
 		Page<UsuarioDaRedeDTO> usuariosDaRedeDTO = this.usuarioDaRedeService.findAll(pageRequest).map(usuario -> this.converter.converterParaDTO(usuario));
 		response.setData(usuariosDaRedeDTO);
+		return ResponseEntity.ok(response);
+	}
+	
+	@GetMapping(value = "todos")
+	public ResponseEntity<Response<List<UsuarioDaRedeDTO>>> buscarServidoresPeloAmbiente() throws NoSuchAlgorithmException {
+		Response<List<UsuarioDaRedeDTO>> response = new Response<List<UsuarioDaRedeDTO>>();
+		List<UsuarioDaRedeDTO> usuariosDaRedeDto = new ArrayList<UsuarioDaRedeDTO>();
+		this.usuarioDaRedeService.findAll().forEach(usuarioDaRede -> usuariosDaRedeDto.add(this.converter.converterParaDTO(usuarioDaRede)));
+		response.setData(usuariosDaRedeDto);
 		return ResponseEntity.ok(response);
 	}
 	

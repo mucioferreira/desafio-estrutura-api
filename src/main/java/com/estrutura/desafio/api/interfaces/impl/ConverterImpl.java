@@ -48,7 +48,7 @@ public class ConverterImpl implements Converter {
 		if(noDaRede == null) return null;
 		NoDaRedeDTO noDaRedeDTO = new NoDaRedeDTO();
 		noDaRedeDTO.setId(noDaRede.getId());
-		noDaRedeDTO.setServidor(noDaRede.getServidor().getId());
+		noDaRedeDTO.setServidor(this.converterParaDTO(noDaRede.getServidor()));
 		noDaRede.getProximoNoOpt().ifPresent(proximo -> noDaRedeDTO.setProximo(proximo.getId()));
 		noDaRede.getDescricaoDaRedeOpt().ifPresent(descricao -> noDaRedeDTO.setDescricaoDaRede(descricao));
 		noDaRedeDTO.setAmbienteDaRede(noDaRede.getAmbienteDaRede());
