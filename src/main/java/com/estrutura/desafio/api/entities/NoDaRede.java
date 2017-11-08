@@ -18,27 +18,27 @@ import javax.persistence.Transient;
 import com.estrutura.desafio.api.enums.AmbienteDaRedeEnum;
 
 @Entity
-@Table(name = "nosdarede")
+@Table(name = "tb_no_da_rede")
 public class NoDaRede {
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
-	@Column(name = "id")
+	@Column(name = "idt_no_da_rede")
 	private Long id;
 	
 	@ManyToOne(fetch = FetchType.EAGER, targetEntity = Servidor.class)
-	@JoinColumn(name = "servidor", nullable = false)
+	@JoinColumn(name = "cod_servidor", nullable = false)
 	private Servidor servidor;
 	
 	@ManyToOne(fetch = FetchType.EAGER, targetEntity = NoDaRede.class)
-	@JoinColumn(name = "proximo_no", nullable = true)
+	@JoinColumn(name = "cod_proximo_no", nullable = true)
 	private NoDaRede proximoNo;
 	
 	@Enumerated(EnumType.STRING)
-	@Column(name = "ambiente", nullable = false)
+	@Column(name = "amb_no_da_rede", nullable = false)
 	private AmbienteDaRedeEnum ambienteDaRede;
 	
-	@Column(name = "descricao")
+	@Column(name = "desc_no_da_rede")
 	private String descricaoDaRede;
 	
 	public NoDaRede() {	}

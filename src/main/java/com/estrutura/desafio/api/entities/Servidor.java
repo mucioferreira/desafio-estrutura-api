@@ -15,22 +15,22 @@ import javax.persistence.Transient;
 import com.estrutura.desafio.api.enums.TipoServidorEnum;
 
 @Entity
-@Table(name = "servidores")
+@Table(name = "tb_servidor")
 public class Servidor {
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
-	@Column(name = "id")
+	@Column(name = "idt_servidor")
 	private Long id;
 	
-	@Column(name = "nome", nullable = false)
+	@Column(name = "nme_servidor", nullable = false)
 	private String nome;
 	
-	@Column(name = "ip", nullable = false)
+	@Column(name = "ip_servidor", nullable = false)
 	private String ip;
 	
 	@Enumerated(EnumType.STRING)
-	@Column(name = "tipo", nullable = false)
+	@Column(name = "tpo_servidor", nullable = false)
 	private TipoServidorEnum tipo;
 	
 	public Servidor() {}

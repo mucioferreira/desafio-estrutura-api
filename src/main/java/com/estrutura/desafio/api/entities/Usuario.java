@@ -8,20 +8,17 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "usuarios")
+@Table(name = "tb_usuario")
 public class Usuario {
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
-	@Column(name = "id")
+	@Column(name = "idt_usuario")
 	private Long id;
 	
-	@Column(name = "nome", nullable = false)
+	@Column(name = "nme_usuario", nullable = false)
 	private String nome;
-	
-//	@OneToMany(mappedBy = "usuario", fetch = FetchType.EAGER, cascade = CascadeType.ALL, targetEntity = UsuarioDaRede.class)
-//	private List<UsuarioDaRede> usuarioDaRede;
-	
+
 	public Usuario() { }
 	
 

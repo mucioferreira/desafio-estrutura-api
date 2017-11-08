@@ -14,23 +14,23 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 
 @Entity
-@Table(name = "usuariosdarede")
+@Table(name = "tb_usuario_da_rede")
 public class UsuarioDaRede {
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
-	@Column(name = "id")
+	@Column(name = "idt_usuario_da_rede")
 	private Long id;
 	
-    @ManyToOne(fetch = FetchType.EAGER, targetEntity = Servidor.class)
-    @JoinColumn(name = "servidor", nullable = false)
-    private Servidor servidor;
+    @ManyToOne(fetch = FetchType.EAGER, targetEntity = NoDaRede.class)
+    @JoinColumn(name = "cod_no_da_rede", nullable = false)
+    private NoDaRede noDaRede;
     
     @ManyToOne(fetch = FetchType.EAGER, targetEntity = Usuario.class)
-    @JoinColumn(name = "usuario", nullable = false)
+    @JoinColumn(name = "cod_usuario", nullable = false)
     private Usuario usuario;
     
-	@Column(name = "descricao")
+	@Column(name = "desc_usuario_da_rede")
 	private String descricaoDaRede;
 	
 	public UsuarioDaRede() {	}
@@ -48,12 +48,12 @@ public class UsuarioDaRede {
 		this.id = id;
 	}
 
-	public Servidor getServidor() {
-		return servidor;
+	public NoDaRede getNoDaRede() {
+		return noDaRede;
 	}
 
-	public void setServidor(Servidor servidor) {
-		this.servidor = servidor;
+	public void setNoDaRede(NoDaRede noDaRede) {
+		this.noDaRede = noDaRede;
 	}
 
 	public Usuario getUsuario() {

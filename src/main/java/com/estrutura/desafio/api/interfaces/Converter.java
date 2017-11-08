@@ -28,7 +28,7 @@ public interface Converter {
 
 	public Servidor converterParaEntidade(ServidorDTO servidorDto);
 
-	public UsuarioDaRede converterParaEntidade(UsuarioDaRedeDTO usuarioDaRedeDTO, Servidor servidor, Usuario usuario);
+	public UsuarioDaRede converterParaEntidade(UsuarioDaRedeDTO usuarioDaRedeDTO, NoDaRede servidor, Usuario usuario);
 
 	public NoDaRede converterParaEntidade(NoDaRedeDTO noDaRedeDTO, Servidor servidor, Optional<NoDaRede> proximoNo);
 

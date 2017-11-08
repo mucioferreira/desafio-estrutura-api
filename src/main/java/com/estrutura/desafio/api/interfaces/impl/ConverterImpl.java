@@ -38,7 +38,7 @@ public class ConverterImpl implements Converter {
 	public UsuarioDaRedeDTO converterParaDTO(UsuarioDaRede usuarioDaRede) {
 		UsuarioDaRedeDTO usuarioDaRedeDto = new UsuarioDaRedeDTO();
 		usuarioDaRede.getIdOpt().ifPresent(id -> usuarioDaRedeDto.setId(id));
-		usuarioDaRedeDto.setServidor(this.converterParaDTO(usuarioDaRede.getServidor()));
+		usuarioDaRedeDto.setNoDaRede(this.converterParaDTO(usuarioDaRede.getNoDaRede()));
 		usuarioDaRedeDto.setUsuario(this.converterParaDTO(usuarioDaRede.getUsuario()));
 		usuarioDaRede.getDescricaoDaRedeOpt().ifPresent(descricao -> usuarioDaRedeDto.setDescricao(descricao));
 		return usuarioDaRedeDto;
@@ -71,10 +71,10 @@ public class ConverterImpl implements Converter {
 		return servidor;
 	}
 	
-	public UsuarioDaRede converterParaEntidade(UsuarioDaRedeDTO usuarioDaRedeDTO, Servidor servidor, Usuario usuario) {
+	public UsuarioDaRede converterParaEntidade(UsuarioDaRedeDTO usuarioDaRedeDTO, NoDaRede servidor, Usuario usuario) {
 		UsuarioDaRede usuarioDaRede = new UsuarioDaRede();
 		usuarioDaRedeDTO.getIdOpt().ifPresent(id -> usuarioDaRede.setId(id));
-		usuarioDaRede.setServidor(servidor);
+		usuarioDaRede.setNoDaRede(servidor);
 		usuarioDaRede.setUsuario(usuario);
 		usuarioDaRedeDTO.getDescricaoOpt().ifPresent(desc -> usuarioDaRede.setDescricaoDaRede(desc));
 		return usuarioDaRede;

@@ -12,8 +12,8 @@ public class UsuarioDaRedeDTO {
 
 	private Optional<Long> id;
 	
-	@NotNull(message = "Servidor não pode ser vazio.")
-	private ServidorDTO servidor;
+	@NotNull(message = "Nó da Rede não pode ser vazio.")
+	private NoDaRedeDTO noDaRede;
 	
 	@NotNull(message = "Usuário não pode ser vazio.")
 	private UsuarioDTO usuario;
@@ -38,15 +38,7 @@ public class UsuarioDaRedeDTO {
 	public void setId(Long id) {
 		this.id = Optional.of(id);
 	}
-
-	public ServidorDTO getServidor() {
-		return servidor;
-	}
-
-	public void setServidor(ServidorDTO servidor) {
-		this.servidor = servidor;
-	}
-
+	
 	public UsuarioDTO getUsuario() {
 		return usuario;
 	}
@@ -59,6 +51,14 @@ public class UsuarioDaRedeDTO {
 		return descricao;
 	}
 	
+	public NoDaRedeDTO getNoDaRede() {
+		return noDaRede;
+	}
+
+	public void setNoDaRede(NoDaRedeDTO noDaRede) {
+		this.noDaRede = noDaRede;
+	}
+
 	@JsonIgnore
 	public Optional<String> getDescricaoOpt() {
 		return Optional.of(descricao);

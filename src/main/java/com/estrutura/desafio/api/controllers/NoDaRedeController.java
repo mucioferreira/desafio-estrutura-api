@@ -166,7 +166,7 @@ public class NoDaRedeController {
 		if((noDaRedeDTO.getProximo() != null) && !proximoNo.isPresent()) result.addError(new ObjectError("proximoNo", String.valueOf(MensagemEnum.PROXIMO_NO_NAO_ENCONTRADO)));
 		if(proximoNo.isPresent() && !noDaRedeDTO.getAmbienteDaRede().equals(proximoNo.get().getAmbienteDaRede())) 
 			result.addError(new ObjectError("ambienteDaRede", String.valueOf(MensagemEnum.AMBIENTE_DIFERENTE)));
-		if((proximoNo.isPresent() && servidor.isPresent()) && proximoNo.get().getServidor().getId().equals(noDaRedeDTO.getServidor()))
+		if((proximoNo.isPresent() && servidor.isPresent()) && proximoNo.get().getServidor().getId().equals(noDaRedeDTO.getServidor().getId()))
 			result.addError(new ObjectError("ambienteDaRede", String.valueOf(MensagemEnum.MESMO_SERVIDOR)));
 	}
 	
